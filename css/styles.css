@@ -1,0 +1,401 @@
+/* ============================================
+   INSPECTOR ELÉCTRICO VIRTUAL - ESTILOS PWA
+   ============================================ */
+
+:root {
+  --color-primary: #1e40af;
+  --color-primary-dark: #1e3a8a;
+  --color-secondary: #f59e0b;
+  --color-success: #10b981;
+  --color-error: #ef4444;
+  --color-bg: #f8fafc;
+  --color-card: #ffffff;
+  --color-text: #1e293b;
+  --color-text-muted: #64748b;
+  --shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+  --radius: 12px;
+  --radius-lg: 16px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.5;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+.header {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+  color: white;
+  padding: 1rem;
+  box-shadow: var(--shadow);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.logo-icon { font-size: 1.5rem; }
+.logo h1 { font-size: 1.25rem; font-weight: 600; }
+
+.badge {
+  background: rgba(255,255,255,0.2);
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+/* Layout Principal */
+.main-container {
+  display: flex;
+  flex: 1;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 1rem;
+  gap: 1rem;
+}
+
+/* Sidebar de Planes */
+.plans-sidebar {
+  width: 320px;
+  background: var(--color-card);
+  border-radius: var(--radius-lg);
+  padding: 1rem;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
+}
+
+.plans-sidebar h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.plan-card {
+  border: 2px solid #e2e8f0;
+  border-radius: var(--radius);
+  padding: 1rem;
+  transition: all 0.2s;
+}
+
+.plan-card.featured {
+  border-color: var(--color-secondary);
+  background: linear-gradient(135deg, #fffbeb, #fef3c7);
+  position: relative;
+}
+
+.plan-card.featured::before {
+  content: "⭐ Más popular";
+  position: absolute;
+  top: -10px;
+  right: 1rem;
+  background: var(--color-secondary);
+  color: white;
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+.plan-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.plan-name { font-weight: 600; font-size: 1.1rem; }
+.plan-price { color: var(--color-primary); font-weight: 700; }
+
+.plan-features {
+  list-style: none;
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+  margin-bottom: 1rem;
+}
+
+.plan-features li { margin: 0.25rem 0; }
+.plan-features li::before { content: ""; margin-right: 0.25rem; }
+
+.btn-plan {
+  width: 100%;
+  padding: 0.5rem;
+  border: 2px solid var(--color-primary);
+  background: white;
+  color: var(--color-primary);
+  border-radius: var(--radius);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-plan:hover { background: var(--color-primary); color: white; }
+.btn-plan.btn-primary { background: var(--color-primary); color: white; }
+.btn-plan.btn-primary:hover { background: var(--color-primary-dark); }
+
+/* Formulario de Pago */
+.payment-form {
+  background: #f1f5f9;
+  padding: 1rem;
+  border-radius: var(--radius);
+  font-size: 0.875rem;
+}
+
+.payment-form h4 { margin-bottom: 0.5rem; }
+.bank-details {
+  background: white;
+  padding: 0.75rem;
+  border-radius: 8px;
+  margin: 0.5rem 0;
+  font-family: monospace;
+  font-size: 0.8rem;
+}
+
+.payment-form input[type="file"] {
+  width: 100%;
+  margin: 0.5rem 0;
+}
+
+.btn-submit {
+  width: 100%;
+  padding: 0.5rem;
+  background: var(--color-success);
+  color: white;
+  border: none;
+  border-radius: var(--radius);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-submit:hover { background: #059669; }
+
+/* Área de Chat */
+.chat-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.chat-messages {
+  flex: 1;
+  padding: 1rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-height: calc(100vh - 280px);
+}
+
+.message {
+  display: flex;
+  gap: 0.75rem;
+  max-width: 85%;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.message.bot { align-self: flex-start; }
+.message.user { align-self: flex-end; flex-direction: row-reverse; }
+
+.message-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.message.user .message-avatar {
+  background: var(--color-secondary);
+}
+
+.message-content {
+  background: #f1f5f9;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius);
+  border-top-left-radius: 4px;
+}
+
+.message.user .message-content {
+  background: var(--color-primary);
+  color: white;
+  border-top-left-radius: var(--radius);
+  border-top-right-radius: 4px;
+}
+
+.message-content p { margin: 0.25rem 0; }
+.message-content ul { margin: 0.5rem 0 0.5rem 1.5rem; }
+.message-content em { color: var(--color-text-muted); font-size: 0.9rem; }
+.message.user em { color: rgba(255,255,255,0.8); }
+
+/* Input de Chat */
+.chat-input-area {
+  padding: 1rem;
+  border-top: 1px solid #e2e8f0;
+  background: white;
+}
+
+.chat-form {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.chat-input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: 2px solid #e2e8f0;
+  border-radius: var(--radius);
+  font-size: 1rem;
+  transition: border-color 0.2s;
+}
+
+.chat-input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+.btn-send {
+  width: 48px;
+  height: 48px;
+  background: var(--color-primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 1.25rem;
+  cursor: pointer;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-send:hover { background: var(--color-primary-dark); }
+.btn-send:disabled { background: #94a3b8; cursor: not-allowed; }
+
+/* Hints de Consulta */
+.chat-hints {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.chat-hints span {
+  background: #f1f5f9;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.chat-hints span:hover {
+  background: var(--color-primary);
+  color: white;
+}
+
+/* Toast de Notificaciones */
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background: var(--color-text);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(100px);
+  opacity: 0;
+  transition: all 0.3s;
+  z-index: 1000;
+}
+
+.toast.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.toast.success { background: var(--color-success); }
+.toast.error { background: var(--color-error); }
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .main-container { flex-direction: column; }
+  .plans-sidebar { 
+    width: 100%; 
+    max-height: 300px;
+    flex-direction: row;
+    overflow-x: auto;
+  }
+  .plan-card { min-width: 280px; }
+}
+
+@media (max-width: 640px) {
+  .header-content { flex-direction: column; gap: 0.5rem; }
+  .message { max-width: 95%; }
+  .chat-hints { justify-content: center; }
+}
+
+/* Estado de Carga */
+.typing-indicator {
+  display: flex;
+  gap: 4px;
+  padding: 0.5rem;
+}
+
+.typing-indicator span {
+  width: 8px;
+  height: 8px;
+  background: var(--color-text-muted);
+  border-radius: 50%;
+  animation: bounce 1.4s infinite ease-in-out;
+}
+
+.typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
+.typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
+
+@keyframes bounce {
+  0%, 80%, 100% { transform: scale(0); }
+  40% { transform: scale(1); }
+}
