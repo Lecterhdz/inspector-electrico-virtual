@@ -1,0 +1,29 @@
+# Dependencias
+node_modules/
+npm-debug.log*
+
+# Variables de entorno (¡NUNCA subas tu API Key!)
+.env
+.env.local
+*.local
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+
+# Logs y temporales
+logs/
+*.log
+tmp/
+
+# Build outputs (si usas bundler)
+dist/
+build/
+
+# IDE
+.vscode/
+.idea/
+
+# PDF de la norma (si lo descargas)
+*.pdf
+!README.md
