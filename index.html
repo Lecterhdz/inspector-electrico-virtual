@@ -2,8 +2,13 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
   <title>Inspector Eléctrico Virtual - NOM-001-SEDE-2012</title>
+  
+  <!-- SEO -->
+  <meta name="description" content="Asistente técnico para normas eléctricas mexicanas NOM-001-SEDE-2012. Validación de puesta a tierra, cálculo de calibres, dimensionamiento de motores y más.">
+  <meta name="keywords" content="NOM-001, eléctrica, puesta a tierra, calibre, motores, HVAC, soldadoras">
+  <meta name="author" content="Inspector Eléctrico Virtual">
   
   <!-- PWA Manifest -->
   <link rel="manifest" href="manifest.json">
@@ -13,16 +18,16 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="InspectorEléctrico">
+  <meta name="apple-mobile-web-app-title" content="Inspector EV">
   
-  <!-- Iconos (placeholders) -->
+  <!-- Iconos (con fallback a emoji) -->
   <link rel="icon" type="image/png" sizes="192x192" href="https://via.placeholder.com/192/1e5a7d/ffffff?text=⚡">
   <link rel="apple-touch-icon" href="https://via.placeholder.com/192/1e5a7d/ffffff?text=⚡">
   
   <!-- Estilos -->
   <link rel="stylesheet" href="css/styles.css">
   
-  <!-- Preconnect -->
+  <!-- Preconnect para mejor rendimiento -->
   <link rel="preconnect" href="https://esm.sh">
   <link rel="preconnect" href="https://eeymrugligeojechkcma.supabase.co">
 </head>
@@ -48,33 +53,29 @@
     <!-- Área de Chat -->
     <section class="chat-area">
       <div class="chat-messages" id="chatMessages">
-        <div class="message bot">
-          <div class="message-avatar">🤖</div>
-          <div class="message-content">
-            <p>¡Hola! Soy Baymax, tu asistente experto en <strong>NOM-001-SEDE-2012</strong>. ⚡</p>
-            <p><strong>Puedo ayudarte con:</strong></p>
-            <ul>
-              <li>✅ Validar puesta a tierra (Tabla 250-122)</li>
-              <li>✅ Calcular calibre por amperaje (Tabla 310-16)</li>
-              <li>✅ Dimensionar motores (Tabla 430-250) <small>(Prime+)</small></li>
-            </ul>
-            <p style="margin-top:0.5rem; font-size:0.85rem; opacity:0.9;">
-              <em>Ejemplo: "Mi puesta a tierra es 10 AWG con interruptor de 40A, ¿está bien?"</em>
-            </p>
-          </div>
-        </div>
+        <!-- Mensaje de bienvenida se carga desde JS -->
       </div>
       
       <div class="chat-input-area">
         <form id="chatForm" class="chat-form">
-          <input type="text" id="userInput" class="chat-input" placeholder="Escribe tu consulta eléctrica..." autocomplete="off" autofocus>
-          <button type="submit" class="btn-send" id="btnSend" title="Enviar"><span>➤</span></button>
+          <input 
+            type="text" 
+            id="userInput" 
+            class="chat-input" 
+            placeholder="Ej: ¿Qué calibre necesito para 50A?" 
+            autocomplete="off" 
+            autofocus
+            enterkeyhint="send"
+          >
+          <button type="submit" class="btn-send" id="btnSend" title="Enviar">
+            <span>➤</span>
+          </button>
         </form>
         <div class="chat-hints">
-          <span class="hint" onclick="fillInput('calibre para 50A')">calibre 50A</span>
-          <span class="hint" onclick="fillInput('puesta a tierra 10 AWG 40A')">tierra 10 AWG 40A</span>
-          <span class="hint" onclick="fillInput('motor 75 HP 440V trifásico')">motor 75 HP</span>
-          <span class="hint" onclick="fillInput('Explica la tabla 250-122')">tabla 250-122</span>
+          <span class="hint" onclick="fillInput('¿Qué calibre necesito para 50A?')">📏 calibre 50A</span>
+          <span class="hint" onclick="fillInput('Mi puesta a tierra es 10 AWG con interruptor de 40A, ¿está bien?')">⚡ tierra 10 AWG 40A</span>
+          <span class="hint" onclick="fillInput('motor 75 HP 440V trifásico')">🔄 motor 75 HP</span>
+          <span class="hint" onclick="fillInput('Explica la tabla 250-122')">📖 tabla 250-122</span>
         </div>
       </div>
     </section>
@@ -83,6 +84,7 @@
     <aside class="plans-sidebar-compact" id="plansCompact">
       <div class="plans-scroll">
         
+        <!-- Plan Base -->
         <div class="plan-card-mini" data-plan="base">
           <div class="plan-mini-header">
             <span class="plan-mini-name">Base</span>
@@ -91,10 +93,12 @@
           <div class="plan-mini-features">
             <span>✅ Puesta a tierra</span>
             <span>✅ Calibre por A</span>
+            <span>✅ Tablas básicas</span>
           </div>
-          <button class="btn-plan-mini" onclick="selectPlan('base')">Elegir</button>
+          <button class="btn-plan-mini" onclick="selectPlan('base')">Seleccionar</button>
         </div>
         
+        <!-- Plan Prime (destacado) -->
         <div class="plan-card-mini featured" data-plan="prime">
           <div class="plan-mini-header">
             <span class="plan-mini-name">Prime ⭐</span>
@@ -102,11 +106,14 @@
           </div>
           <div class="plan-mini-features">
             <span>✅ Todo Base</span>
-            <span>✅ Motores, HVAC</span>
+            <span>✅ Motores (430)</span>
+            <span>✅ HVAC (440)</span>
+            <span>✅ Soldadoras (630)</span>
           </div>
-          <button class="btn-plan-mini btn-primary" onclick="selectPlan('prime')">Elegir</button>
+          <button class="btn-plan-mini btn-primary" onclick="selectPlan('prime')">Seleccionar</button>
         </div>
         
+        <!-- Plan Apex -->
         <div class="plan-card-mini" data-plan="apex">
           <div class="plan-mini-header">
             <span class="plan-mini-name">Apex</span>
@@ -114,13 +121,15 @@
           </div>
           <div class="plan-mini-features">
             <span>✅ Todo Prime</span>
-            <span>✅ PDF + Soporte</span>
+            <span>✅ Reportes PDF</span>
+            <span>✅ Soporte prioritario</span>
           </div>
-          <button class="btn-plan-mini" onclick="selectPlan('apex')">Elegir</button>
+          <button class="btn-plan-mini" onclick="selectPlan('apex')">Seleccionar</button>
         </div>
         
+        <!-- Botón de Licencia -->
         <div class="license-btn-wrapper">
-          <button class="btn-license" onclick="document.getElementById('authModal').style.display='flex'">
+          <button class="btn-license" onclick="openAuthModal()">
             🎟️ Licencia
           </button>
         </div>
@@ -130,51 +139,87 @@
     
   </main>
 
-  <!-- Auth Modal -->
-  <div id="authModal" class="modal">
+  <!-- Auth Modal (usando dialog nativo para mejor accesibilidad) -->
+  <dialog id="authModal" class="modal">
     <div class="modal-content">
-      <button class="modal-close" onclick="document.getElementById('authModal').style.display='none'">&times;</button>
+      <button class="modal-close" onclick="closeAuthModal()">&times;</button>
       <h3>🔐 Acceso Inspector</h3>
       
-      <input id="authEmail" type="email" placeholder="Correo electrónico" class="modal-input">
-      <input id="authPass" type="password" placeholder="Contraseña (mín. 6 caracteres)" class="modal-input">
+      <div style="margin-bottom: 1rem;">
+        <input id="authEmail" type="email" placeholder="Correo electrónico" class="modal-input" autocomplete="email">
+        <input id="authPass" type="password" placeholder="Contraseña (mín. 6 caracteres)" class="modal-input" autocomplete="current-password">
+      </div>
       
       <div class="modal-buttons">
-        <button class="btn-modal" onclick="handleAuth('signup')">Registrarse</button>
-        <button class="btn-modal btn-secondary" onclick="handleAuth('login')">Ingresar</button>
+        <button class="btn-modal" onclick="handleAuth('signup')">📝 Registrarse</button>
+        <button class="btn-modal btn-secondary" onclick="handleAuth('login')">🔑 Ingresar</button>
       </div>
       
       <hr class="modal-divider">
       
       <div class="license-section">
         <div class="license-title">🎟️ Canjear Licencia</div>
-        <p class="license-help">Obtén tu código en Supabase → SQL Editor → tabla <code>licenses</code></p>
-        <input id="licenseCode" placeholder="Ej: IEV-PRIME-30D-XXXX" class="modal-input code-input">
-        <button class="btn-license-activate" onclick="redeemLicense()">Activar Plan</button>
+        <p class="license-help">
+          Introduce tu código de licencia para activar el plan correspondiente.<br>
+          <small>Ejemplo: <code>IEV-PRIME-30D-XXXX</code> o <code>IEV-APEX-ANNUAL-XXXX</code></small>
+        </p>
+        <input id="licenseCode" placeholder="Ej: IEV-PRIME-30D-ABCD" class="modal-input code-input">
+        <button class="btn-license-activate" onclick="redeemLicense()">🎟️ Activar Licencia</button>
       </div>
       
-      <div id="userInfo" class="user-info">
-        <strong>Usuario:</strong> <span id="userEmail"></span><br>
-        <strong>Plan:</strong> <span id="userPlan"></span><br>
-        <strong>Vence:</strong> <span id="userExpiry"></span>
+      <div id="userInfo" class="user-info" style="display: none;">
+        <strong>👤 Usuario:</strong> <span id="userEmail"></span><br>
+        <strong>📋 Plan:</strong> <span id="userPlan"></span><br>
+        <strong>📅 Vence:</strong> <span id="userExpiry"></span>
       </div>
     </div>
-  </div>
+  </dialog>
 
-  <!-- Toast -->
+  <!-- Toast de notificaciones -->
   <div id="toast" class="toast"></div>
 
   <!-- Scripts -->
   <script type="module" src="js/app.js"></script>
   <script src="js/plans.js"></script>
+  <script src="js/auth.js"></script>
   
-  <!-- Service Worker -->
+  <!-- Service Worker Registration -->
   <script>
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js')
-        .then(reg => console.log('✅ SW registrado:', reg.scope))
-        .catch(err => console.warn('⚠️ SW error:', err));
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js')
+          .then(reg => console.log('✅ Service Worker registrado:', reg.scope))
+          .catch(err => console.warn('⚠️ Service Worker error:', err));
+      });
     }
+    
+    // Funciones globales para hints
+    window.fillInput = function(text) {
+      const input = document.getElementById('userInput');
+      if (input) {
+        input.value = text;
+        input.focus();
+      }
+    };
+    
+    // Funciones para modal
+    window.openAuthModal = function() {
+      const modal = document.getElementById('authModal');
+      if (modal) modal.showModal();
+    };
+    
+    window.closeAuthModal = function() {
+      const modal = document.getElementById('authModal');
+      if (modal) modal.close();
+    };
+    
+    // Cerrar modal con ESC
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        const modal = document.getElementById('authModal');
+        if (modal && modal.open) modal.close();
+      }
+    });
   </script>
 </body>
 </html>
