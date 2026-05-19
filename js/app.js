@@ -246,34 +246,60 @@ window.handleAuth = async (type) => {
 window.redeemLicense = async () => {
   if (!session.user) return showToast('Inicia sesión primero', 'warning');
   
-  const code = document.getElementById('licenseCode')?.value.trim().toUpperCase();
+  const codeInput = document.getElementById('licenseCode');
+  const code = codeInput?.value.trim().toUpperCase();
   if (!code) return showToast('Ingresa un código de licencia', 'warning');
   
-  // Verificar licencia en Supabase
-  const { data: lic, error: licErr } = await supabase.from('licenses')
-    .select('*').eq('code', code).single();
-  
-  if (licErr || !lic || !lic.is_active) return showToast('Licencia inválida o ya usada', 'error');
-  if (new Date(lic.expires_at) < new Date()) return showToast('Licencia expirada', 'error');
-  
-  // Actualizar perfil del usuario
-  const { error: updateErr } = await supabase.from('profiles')
-    .update({ plan: lic.plan, license_code: lic.code, expires_at: lic.expires_at })
-    .eq('id', session.user.id);
-  
-  if (updateErr) return showToast('Error al activar licencia', 'error');
-  
-  // Marcar licencia como usada
-  await supabase.from('licenses').update({ is_active: false, used_by: session.user.id }).eq('code', code);
-  
-  // Recargar sesión
-  await loadProfile(session.user.id);
-  updatePlanUI();
-  updateUserInfoModal();
-  showToast(`✅ Plan ${session.plan} activado. Vence: ${new Date(lic.expires_at).toLocaleDateString('es-MX')}`, 'success');
-  
-  const licenseInput = document.getElementById('licenseCode');
-  if (licenseInput) licenseInput.value = '';
+  try {
+    console.log('[License] Buscando:', code);
+    
+    // 1. Buscar licencia
+    const { data: lic, error: licErr } = await supabase
+      .from('licenses')
+      .select('*')
+      .eq('code', code)
+      .single();
+      
+    if (licErr) {
+      console.error('[License] Error Supabase:', licErr);
+      throw new Error(licErr.code === 'PGRST116' ? 'Licencia no encontrada' : licErr.message);
+    }
+    
+    if (!lic) throw new Error('Licencia no encontrada');
+    if (!lic.is_active) throw new Error('Licencia ya usada o desactivada');
+    if (new Date(lic.expires_at) < new Date()) throw new Error('Licencia expirada');
+    
+    // 2. Actualizar perfil
+    const { error: updateErr } = await supabase
+      .from('profiles')
+      .update({ 
+        plan: lic.plan, 
+        license_code: lic.code, 
+        expires_at: lic.expires_at 
+      })
+      .eq('id', session.user.id);
+      
+    if (updateErr) throw new Error('Error al activar: ' + updateErr.message);
+    
+    // 3. Marcar como usada
+    const { error: markErr } = await supabase
+      .from('licenses')
+      .update({ is_active: false, used_by: session.user.id })
+      .eq('code', code);
+      
+    if (markErr) throw new Error('Error al marcar usada: ' + markErr.message);
+    
+    // 4. Recargar sesión
+    await loadProfile(session.user.id);
+    updatePlanUI();
+    updateUserInfoModal();
+    showToast(`✅ Plan ${session.plan} activado por 30 días`, 'success');
+    if (codeInput) codeInput.value = '';
+    
+  } catch (err) {
+    console.error('[License] Fallo:', err);
+    showToast(`❌ ${err.message}`, 'error');
+  }
 };
 
 // Actualizar UI de planes
