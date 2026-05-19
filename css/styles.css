@@ -89,13 +89,17 @@ body {
   width: 100%;
   margin: 0 auto;
   padding: 1rem;
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: 1rem;
-  grid-template-columns: 1fr;
-  grid-template-rows: 1fr auto;
   min-height: calc(100vh - 72px);
 }
-
+/* Fallback para navegadores sin dvh */
+@supports not (height: 100dvh) {
+  .main-container {
+    min-height: calc(100vh - 72px);
+  }
+}
 /* ========== CHAT AREA ========== */
 .chat-area {
   background: white;
@@ -106,15 +110,11 @@ body {
   flex-direction: column;
   min-height: 0;
   overflow: hidden;
-   /* ✅ Móvil por defecto: altura dinámica */
-  height: calc(100dvh - 72px - 80px - 2rem); /* header + plans + padding */
+  flex: 1;
+  height: auto; /* ✅ Dejar que flex calcule */
+  min-height: 200px; /* ✅ Mínimo para usabilidad */
 }
-/* Fallback para navegadores sin dvh */
-@supports not (height: 100dvh) {
-  .chat-area {
-    height: calc(100vh - 72px - 80px - 2rem);
-  }
-}
+
 .chat-messages {
   flex: 1;
   overflow-y: auto;
@@ -598,14 +598,18 @@ body {
 /* ========== RESPONSIVE: DESKTOP ========== */
 @media (min-width: 1024px) {
   .main-container {
+    display: grid;
     grid-template-columns: 1fr 280px;
     grid-template-rows: 1fr;
     padding: 1.5rem;
+    flex-direction: row;
   }
   
   .chat-area {
     order: 1;
-    border-radius: var(--radius-lg);
+    height: auto; /* Resetear altura móvil */
+    min-height: auto;
+    flex: none; /* Resetear flex grow */
   }
   
   .plans-sidebar-compact {
