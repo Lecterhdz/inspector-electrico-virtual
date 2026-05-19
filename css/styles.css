@@ -106,8 +106,15 @@ body {
   flex-direction: column;
   min-height: 0;
   overflow: hidden;
+   /* ✅ Móvil por defecto: altura dinámica */
+  height: calc(100dvh - 72px - 80px - 2rem); /* header + plans + padding */
 }
-
+/* Fallback para navegadores sin dvh */
+@supports not (height: 100dvh) {
+  .chat-area {
+    height: calc(100vh - 72px - 80px - 2rem);
+  }
+}
 .chat-messages {
   flex: 1;
   overflow-y: auto;
@@ -115,6 +122,9 @@ body {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  min-height: 0; /* ✅ CRÍTICO para scroll interno */
+  -webkit-overflow-scrolling: touch; /* ✅ Scroll suave en iOS */
+}
 }
 
 .chat-messages::-webkit-scrollbar { width: 6px; }
@@ -645,8 +655,13 @@ body {
 
 /* Móvil muy pequeño */
 @media (max-width: 480px) {
-  .main-container { padding: 0.75rem; }
-  .chat-area { height: calc(100vh - 170px); border-radius: var(--radius); }
+  .main-container { padding: 0.5rem; }
+  .chat-area { height: calc(100dvh - 64px - 70px - 1rem); border-radius: var(--radius); }
+   @supports not (height: 100dvh) {
+     .chat-area {
+       height: calc(100vh - 64px - 70px - 1rem);
+     }
+   }
   .chat-input-area { padding: 0.75rem; }
   .chat-form { gap: 0.375rem; }
   .chat-input { padding: 0.625rem 1rem; font-size: 0.8125rem; }
@@ -655,7 +670,11 @@ body {
   .toast { bottom: 1rem; right: 1rem; left: 1rem; max-width: none; }
   .plan-card-mini { min-width: 160px; padding: 0.75rem; }
 }
-
+  @supports not (height: 100dvh) {
+    .chat-area {
+      height: calc(100vh - 64px - 70px - 1rem);
+    }
+  }
 /* Accesibilidad */
 :focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
 
