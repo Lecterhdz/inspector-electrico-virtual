@@ -205,211 +205,51 @@ chatForm.addEventListener('submit', async (e) => {
   userInput.focus();
 });
 
-// ============================================
-// PROCESAMIENTO DE CONSULTAS (Simulación → Motor Real)
-// ============================================
-
 /**
- * Procesa la consulta del usuario
- * @param {string} input - Texto del usuario
- * @returns {Promise<Object>} Respuesta formateada
+ * Procesa la consulta llamando a tu API en Cloudflare Workers
  */
 async function processQuery(input) {
-  // Simular delay de red para UX realista
-  await new Promise(resolve => setTimeout(resolve, 500 + Math.random() * 800));
+  // 🔗 ⚠️ REEMPLAZA CON TU URL REAL DE CLOUDFLARE WORKERS
+  const API_URL = 'inspector-electrico-api.dialectycam.workers.dev';
   
+  const sessionData = {
+    plan: session.plan,
+    parametros: session.parametros,
+    historial: session.historial.slice(-5)
+  };
+
+  try {
+    const response = await fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ input, session: sessionData }),
+      signal: AbortSignal.timeout(10000) // 10s timeout
+    });
+
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const data = await response.json();
+    
+    if (!data.success) throw new Error(data.error || 'Error en servidor');
+    
+    return data.respuesta;
+  } catch (error) {
+    console.warn('[API Fallback]:', error.message);
+    // Fallback local si la API falla (offline/error temporal)
+    return processQueryLocalFallback(input);
+  }
+}
+
+/**
+ * Fallback local mínimo (mantiene la PWA funcional sin internet)
+ */
+async function processQueryLocalFallback(input) {
+  await new Promise(r => setTimeout(r, 500));
   const texto = input.toLowerCase();
   
-  // ==========================================
-  // 1. VALIDACIÓN DE PUESTA A TIERRA (250-122)
-  // ==========================================
-  if (texto.includes('puesta a tierra') && /\d+\s*awg/i.test(texto) && /\d+\s*a/i.test(texto)) {
-    const matchCalibre = texto.match(/(\d+)\s*awg/i);
-    const matchAmp = texto.match(/(\d+)\s*a/i);
-    
-    if (matchCalibre && matchAmp) {
-      const calibre = parseInt(matchCalibre[1]);
-      const interruptor = parseInt(matchAmp[1]);
-      
-      // Lógica simplificada de Tabla 250-122
-      const minimo = interruptor <= 20 ? 14 : 
-                     interruptor <= 60 ? 10 : 
-                     interruptor <= 100 ? 8 : 6;
-      const cumple = calibre >= minimo;
-      
-      return {
-        conclusion: cumple 
-          ? `✅ **CORRECTO**: ${calibre} AWG cumple con Tabla 250-122 para interruptor ${interruptor}A`
-          : `❌ **INCORRECTO**: Se requiere mínimo **${minimo} AWG** según Tabla 250-122 (tienes ${calibre} AWG para interruptor ${interruptor}A)`,
-        fundamento: { norma: "NOM-001-SEDE-2012", articulo: "250-122", tabla: "250-122" },
-        modo: 'validacion'
-      };
-    }
-  }
-  
-  // ==========================================
-  // 2. CÁLCULO DE CALIBRE POR AMPERAJE (310-16)
-  // ==========================================
   if (texto.includes('calibre') && /\d+\s*a/i.test(texto)) {
-    const match = texto.match(/(\d+)\s*a/i);
-    if (match) {
-      const amperaje = parseInt(match[1]);
-      const calibre = amperaje <= 20 ? '14 AWG' : 
-                      amperaje <= 35 ? '12 AWG' : 
-                      amperaje <= 50 ? '10 AWG' : 
-                      amperaje <= 65 ? '8 AWG' : '6 AWG';
-      
-      return {
-        respuesta_directa: `Para **${amperaje}A**: calibre sugerido **${calibre}** cobre (THW, 30°C, sin agrupamiento)`,
-        fundamento: { norma: "NOM-001-SEDE-2012", tabla: "310-16" },
-        modo: 'calculo'
-      };
-    }
+    return { respuesta_directa: `📱 Modo offline: Para ${input}, usa la app con conexión activa para validación precisa.` };
   }
-  
-  // ==========================================
-  // 3. EXPLICACIÓN DE TABLAS NORMATIVAS
-  // ==========================================
-  if (texto.includes('explica') && texto.includes('tabla')) {
-    // Extraer número de tabla si está presente
-    const matchTabla = texto.match(/tabla\s+(\d{3}-\d{2,3}|\d{3})/i);
-    const tablaId = matchTabla ? matchTabla[1] : '';
-    
-    // Base de conocimiento de tablas (hard-coded para MVP)
-    const respuestasTablas = {
-      '250-122': `📊 **Tabla 250-122: Calibre mínimo del conductor de puesta a tierra de equipo**
-
-🔑 **Regla principal**: El calibre se determina por la capacidad del **INTERRUPTOR automático**, NO por el conductor de fase.
-
-📋 **Valores típicos (cobre)**:
-• Interruptor 15-20A → 14 AWG
-• Interruptor 30-60A → 10 AWG  
-• Interruptor 100A → 8 AWG
-• Interruptor 200A → 6 AWG
-• Interruptor 400A → 3 AWG
-
-⚠️ **Regla crítica (Art. 250-122(B))**: Si el conductor de fase se aumentó por caída de tensión, el de puesta a tierra también debe aumentarse **proporcionalmente**.
-
-🔧 **Ejemplo**: Interruptor 90A → requiere mínimo **8 AWG** cobre.
-
-💡 *¿Quieres validar una puesta a tierra? Proporciona: calibre declarado y capacidad del interruptor.*`,
-      
-      '310-16': `📊 **Tabla 310-16: Ampacidades de conductores aislados (0-2000V)**
-
-🔑 **Regla principal**: Corriente máxima permisible para conductores a **30°C en aire, sin agrupamiento**.
-
-📋 **Valores típicos (cobre, 75°C)**:
-• 14 AWG → 20A | 12 AWG → 25A | 10 AWG → 35A
-• 8 AWG → 50A | 6 AWG → 65A | 4 AWG → 85A
-• 3 AWG → 100A | 2 AWG → 115A | 1 AWG → 130A
-
-⚠️ **Factores de corrección obligatorios**:
-• Temperatura ambiente >30°C: aplicar factor (Tabla 310-19)
-• Más de 3 conductores agrupados: aplicar factor (Tabla 310-15(b)(3)(a))
-• Temperatura de terminales: usar columna 60/75/90°C (Art. 110-14(c))
-
-💡 *¿Quieres calcular un calibre? Proporciona: corriente requerida y condiciones de instalación.*`,
-      
-      '430-250': `📊 **Tabla 430-250: Corriente a plena carga de motores de CA**
-
-🔑 **Regla principal**: Corriente nominal para dimensionar conductores (125%) y protecciones (hasta 250%).
-
-📋 **Ejemplos (trifásicos 440V)**:
-• 10 HP → 14 A | 25 HP → 34 A
-• 50 HP → 65 A | 75 HP → 96 A
-• 100 HP → 124 A | 150 HP → 180 A
-
-⚠️ **Reglas de aplicación**:
-• Usar valores de placa cuando estén disponibles (Art. 430-6)
-• Conductor del motor: 125% de corriente (Art. 430-22)
-• Protección magnética: hasta 250% para permitir arranque (Art. 430-52)
-
-💡 *¿Quieres calcular un motor? Proporciona: HP, tensión (V) y si es monofásico o trifásico.*`,
-
-      '240-6': `📊 **Tabla 240-6: Tamaños estándar de protecciones contra sobrecorriente**
-
-🔑 **Regla principal**: Lista los valores comerciales estándar de interruptores termomagnéticos y fusibles.
-
-📋 **Valores estándar (A)**:
-15, 20, 25, 30, 35, 40, 45, 50, 60, 70, 80, 90, 100, 110, 125, 150, 175, 200...
-
-⚠️ **Regla del "siguiente tamaño" (Art. 240-4(B))**:
-Si el cálculo no coincide con un valor estándar, se permite usar el **siguiente tamaño estándar mayor** (hasta 800A), siempre que el conductor lo permita.
-
-🔧 **Ejemplo**: Cálculo da 47A → usar siguiente tamaño: **50A** ✅
-
-💡 *¿Quieres coordinar una protección? Proporciona: corriente calculada y calibre del conductor.*`
-    };
-    
-    const contenido = respuestasTablas[tablaId] || 
-      `📊 **Tabla ${tablaId || 'solicitada'}**
-
-Para explicaciones detalladas de tablas normativas:
-
-✅ **Plan Base**: Tablas 250-122, 310-16 básicas
-✅ **Plan Prime**: + Motores (430-250), HVAC (440), Soldadoras (630)
-✅ **Plan Apex**: + Reportes PDF con logo y trazabilidad
-
-💡 *Selecciona un plan en el panel lateral para acceder al contenido completo.*`;
-
-    return {
-      explicacion: contenido,
-      fundamento: { norma: "NOM-001-SEDE-2012", tabla: tablaId || 'general' },
-      modo: 'explicacion_tabla'
-    };
-  }
-  
-  // ==========================================
-  // 4. MOTORES (Simulación básica)
-  // ==========================================
-  if (texto.includes('motor') && /\d+\s*hp/i.test(texto) && /\d+\s*v/i.test(texto)) {
-    const matchHP = texto.match(/(\d+)\s*hp/i);
-    const matchV = texto.match(/(\d+)\s*v/i);
-    const trifasico = texto.includes('trifásico') || texto.includes('3 fases');
-    
-    if (matchHP && matchV) {
-      const hp = parseInt(matchHP[1]);
-      const voltaje = parseInt(matchV[1]);
-      
-      // Cálculo simplificado basado en Tabla 430-250 (440V trifásico)
-      if (trifasico && voltaje >= 400) {
-        const corrienteBase = { 10: 14, 25: 34, 50: 65, 75: 96, 100: 124, 150: 180 };
-        const Ipc = corrienteBase[hp] || Math.round(hp * 1.2); // Fallback aproximado
-        
-        return {
-          respuesta_directa: `📊 **MOTOR ${hp} HP, ${voltaje}V, ${trifasico ? '3' : '1'} fases**:
-• Corriente a placa: **${Ipc} A**
-• Protección térmica: **${Math.round(Ipc * 1.25)} A** (125% según Art. 430-22)
-• Protección magnética: **${Math.round(Ipc * 2.5)} A** (250% según Art. 430-52)
-• Conductor sugerido: **${Ipc <= 50 ? '8 AWG' : Ipc <= 65 ? '6 AWG' : Ipc <= 100 ? '3 AWG' : '1 AWG'}** (cobre, THW)
-
-📚 Fundamento: Tabla 430-250 NOM-001-SEDE-2012`,
-          fundamento: { norma: "NOM-001-SEDE-2012", tabla: "430-250", articulo: "430-22, 430-52" },
-          modo: 'calculo_motor'
-        };
-      }
-    }
-  }
-  
-  // ==========================================
-  // 5. FALLBACK GENÉRICO CON SUGERENCIAS
-  // ==========================================
-  return {
-    pregunta: `¿Podrías especificar qué dato necesitas? Ejemplos:
-
-• \`calibre para 50A\`
-• \`puesta a tierra para interruptor 100A\`
-• \`motor 75 HP 440V trifásico\`
-• \`Explica la tabla 250-122\`
-• \`¿Qué dice el artículo 110-12?\``,
-    modo: 'clarificacion',
-    sugerencias: [
-      'calibre para 50A',
-      'puesta a tierra 10 AWG 40A',
-      'motor 75 HP 440V trifásico',
-      'Explica la tabla 250-122'
-    ]
-  };
+  return { pregunta: "⚠️ Sin conexión. Reconecta para validar con la NOM-001-SEDE-2012." };
 }
 
 // ============================================
