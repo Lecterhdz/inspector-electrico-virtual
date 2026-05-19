@@ -5,8 +5,8 @@
  */
 
 // 🔗 CONFIGURACIÓN SUPABASE (REEMPLAZA CON TUS DATOS REALES)
-const SUPABASE_URL = 'https://TU_PROYECTO.supabase.co';
-const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.TU_ANON_KEY_AQUI';
+const SUPABASE_URL = 'https://eeymrugligeojechkcma.supabase.co';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVleW1ydWdsaWdlb2plY2hrY21hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg3OTMyODEsImV4cCI6MjA5NDM2OTI4MX0.wVmp2GZZa574pM0ghKJ4t99wyZLWjIcX8_cm3N_dlFk';
 
 // Importar Supabase (CDN para PWA estática)
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
