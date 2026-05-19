@@ -2,49 +2,103 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Inspector Eléctrico Virtual - NOM-001-SEDE-2012</title>
   
-  <!-- ✅ PWA Manifest (rutas relativas para GitHub Pages) -->
+  <!-- PWA Manifest -->
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#1e5a7d">
-  
-  <!-- ✅ Meta tags para PWA (orden correcto, sin duplicados) -->
-  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#1e40af">
   <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes"> 
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="InspectorEléctrico">
   
-  <!-- ✅ Iconos (rutas relativas, placeholders si no existen aún) -->
-  <link rel="icon" type="image/png" sizes="192x192" href="https://via.placeholder.com/192/1e5a7d/ffffff?text=⚡">
-  <link rel="apple-touch-icon" href="https://via.placeholder.com/192/1e5a7d/ffffff?text=⚡">
+  <!-- Iconos -->
+  <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png">
+  <link rel="apple-touch-icon" href="/icons/icon-192.png">
   
   <!-- Estilos -->
   <link rel="stylesheet" href="css/styles.css">
-  
-  <!-- Preconnect para mejor performance -->
-  <link rel="preconnect" href="https://esm.sh">
-  <link rel="preconnect" href="https://eeymrugligeojechkcma.supabase.co">
 </head>
 <body>
-  <!-- Header compacto -->
+  <!-- Header -->
   <header class="header">
     <div class="header-content">
       <div class="logo">
         <span class="logo-icon">⚡</span>
-        <div>
-          <h1>Inspector Eléctrico</h1>
-          <small style="opacity:0.9; font-size:0.8rem;">NOM-001-SEDE-2012</small>
-        </div>
+        <h1>Inspector Eléctrico Virtual</h1>
       </div>
-      <span class="badge" id="planBadge">BASE</span>
+      <span class="badge">NOM-001-SEDE-2012</span>
     </div>
   </header>
 
   <!-- Contenedor Principal -->
   <main class="main-container">
     
-    <!-- Área de Chat (ocupa todo el espacio disponible) -->
+    <!-- Selector de Planes (Sidebar) -->
+    <aside class="plans-sidebar" id="plansSidebar">
+      <h3>📋 Planes Disponibles</h3>
+      
+      <div class="plan-card" data-plan="base">
+        <div class="plan-header">
+          <span class="plan-name">Base</span>
+          <span class="plan-price">$1,499/mes</span>
+        </div>
+        <ul class="plan-features">
+          <li>✅ Validación puesta a tierra</li>
+          <li>✅ Cálculo de calibre por amperaje</li>
+          <li>✅ Tablas 250-122, 310-16</li>
+          <li>❌ Motores, HVAC, soldadoras</li>
+          <li>❌ Reportes PDF</li>
+        </ul>
+        <button class="btn-plan" onclick="selectPlan('base')">Seleccionar</button>
+      </div>
+      
+      <div class="plan-card featured" data-plan="prime">
+        <div class="plan-header">
+          <span class="plan-name">Prime</span>
+          <span class="plan-price">$2,499/mes</span>
+        </div>
+        <ul class="plan-features">
+          <li>✅ Todo lo de Base</li>
+          <li>✅ Motores (430-250, 430-22, 430-52)</li>
+          <li>✅ HVAC (Art. 440)</li>
+          <li>✅ Soldadoras (Art. 630)</li>
+          <li>❌ Reportes PDF</li>
+        </ul>
+        <button class="btn-plan btn-primary" onclick="selectPlan('prime')">Seleccionar</button>
+      </div>
+      
+      <div class="plan-card" data-plan="apex">
+        <div class="plan-header">
+          <span class="plan-name">Apex</span>
+          <span class="plan-price">$3,999/mes</span>
+        </div>
+        <ul class="plan-features">
+          <li>✅ Todo lo de Prime</li>
+          <li>✅ Reportes PDF con logo</li>
+          <li>✅ Trazabilidad con hash</li>
+          <li>✅ Soporte prioritario</li>
+          <li>✅ Actualizaciones automáticas</li>
+        </ul>
+        <button class="btn-plan" onclick="selectPlan('apex')">Seleccionar</button>
+      </div>
+      
+      <!-- Formulario de Comprobante -->
+      <div class="payment-form" id="paymentForm" style="display:none;">
+        <h4>📤 Subir Comprobante</h4>
+        <p>Envía tu comprobante de transferencia a:</p>
+        <div class="bank-details">
+          <strong>BBVA México</strong><br>
+          Inspector Eléctrico Virtual S.A. de C.V.<br>
+          CLABE: 012345678901234567<br>
+          Referencia: IEV-<span id="refCode">XXXX</span>
+        </div>
+        <input type="file" id="proofFile" accept="image/*,.pdf">
+        <button class="btn-submit" onclick="submitPayment()">Enviar Comprobante</button>
+      </div>
+    </aside>
+
+    <!-- Área de Chat -->
     <section class="chat-area">
       
       <!-- Mensajes -->
@@ -53,16 +107,15 @@
         <div class="message bot">
           <div class="message-avatar">🤖</div>
           <div class="message-content">
-            <p>¡Hola! Soy Baymax, tu asistente experto en <strong>NOM-001-SEDE-2012</strong>. ⚡</p>
-            <p><strong>Puedo ayudarte con:</strong></p>
+            <p>¡Hola! Soy Baymax, tu asistente experto en NOM-001-SEDE-2012. ⚡</p>
+            <p>Puedo ayudarte con:</p>
             <ul>
               <li>✅ Validar puesta a tierra (Tabla 250-122)</li>
               <li>✅ Calcular calibre por amperaje (Tabla 310-16)</li>
-              <li>✅ Dimensionar motores (Tabla 430-250) <small>(Prime+)</small></li>
+              <li>✅ Dimensionar motores (Tabla 430-250)</li>
+              <li>✅ Explicar artículos de la norma</li>
             </ul>
-            <p style="margin-top:0.5rem; font-size:0.85rem; opacity:0.9;">
-              <em>Ejemplo: "Mi puesta a tierra es 10 AWG con interruptor de 40A, ¿está bien?"</em>
-            </p>
+            <p><em>Ejemplo: "Mi puesta a tierra es 10 AWG con interruptor de 40A, ¿está bien?"</em></p>
           </div>
         </div>
       </div>
@@ -78,15 +131,15 @@
             autocomplete="off"
             autofocus
           >
-          <button type="submit" class="btn-send" id="btnSend" title="Enviar">
+          <button type="submit" class="btn-send" id="btnSend">
             <span>➤</span>
           </button>
         </form>
         <div class="chat-hints">
-          <span class="hint" onclick="fillInput('calibre para 50A')">calibre 50A</span>
-          <span class="hint" onclick="fillInput('puesta a tierra 10 AWG 40A')">tierra 10 AWG 40A</span>
-          <span class="hint" onclick="fillInput('motor 75 HP 440V trifásico')">motor 75 HP</span>
-          <span class="hint" onclick="fillInput('Explica la tabla 250-122')">tabla 250-122</span>
+          <span onclick="fillInput('calibre para 50A')">calibre para 50A</span>
+          <span onclick="fillInput('puesta a tierra 10 AWG 40A')">puesta a tierra 10 AWG 40A</span>
+          <span onclick="fillInput('motor 75 HP 440V trifásico')">motor 75 HP</span>
+          <span onclick="fillInput('Explica la tabla 250-122')">Explica tabla 250-122</span>
         </div>
       </div>
       
@@ -94,113 +147,10 @@
     
   </main>
 
-  <!-- ✅ Plans Sidebar COMPACTO en parte inferior (scroll horizontal) -->
-  <aside class="plans-sidebar-compact" id="plansCompact">
-    <div class="plans-scroll">
-      
-      <div class="plan-card-mini" data-plan="base">
-        <div class="plan-mini-header">
-          <span class="plan-mini-name">Base</span>
-          <span class="plan-mini-price">$1,499</span>
-        </div>
-        <div class="plan-mini-features">
-          <span>✅ Puesta a tierra</span>
-          <span>✅ Calibre por A</span>
-        </div>
-        <button class="btn-plan-mini" onclick="selectPlan('base')">Elegir</button>
-      </div>
-      
-      <div class="plan-card-mini featured" data-plan="prime">
-        <div class="plan-mini-header">
-          <span class="plan-mini-name">Prime ⭐</span>
-          <span class="plan-mini-price">$2,499</span>
-        </div>
-        <div class="plan-mini-features">
-          <span>✅ Todo Base</span>
-          <span>✅ Motores, HVAC</span>
-        </div>
-        <button class="btn-plan-mini btn-primary" onclick="selectPlan('prime')">Elegir</button>
-      </div>
-      
-      <div class="plan-card-mini" data-plan="apex">
-        <div class="plan-mini-header">
-          <span class="plan-mini-name">Apex</span>
-          <span class="plan-mini-price">$3,999</span>
-        </div>
-        <div class="plan-mini-features">
-          <span>✅ Todo Prime</span>
-          <span>✅ PDF + Soporte</span>
-        </div>
-        <button class="btn-plan-mini" onclick="selectPlan('apex')">Elegir</button>
-      </div>
-      
-      <!-- Botón para canjear licencia (visible siempre) -->
-      <div class="license-btn-wrapper">
-        <button class="btn-license" onclick="document.getElementById('authModal').style.display='flex'">
-          🎟️ Canjear Licencia
-        </button>
-      </div>
-      
-    </div>
-  </aside>
-
-  <!-- ✅ Auth & License Modal (reabrible) -->
-  <div id="authModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:300; align-items:center; justify-content:center; padding:1rem;">
-    <div style="background:white; padding:1.5rem; border-radius:1rem; width:100%; max-width:420px; box-shadow:0 20px 40px rgba(0,0,0,0.3); position:relative;">
-      
-      <!-- Close button -->
-      <button onclick="document.getElementById('authModal').style.display='none'" 
-              style="position:absolute; top:0.75rem; right:0.75rem; background:none; border:none; font-size:1.5rem; cursor:pointer; color:var(--gray-600);">&times;</button>
-      
-      <h3 style="margin:0 0 1rem 0; color:var(--primary-dark); font-size:1.2rem;">🔐 Acceso Inspector</h3>
-      
-      <!-- Login Form -->
-      <input id="authEmail" type="email" placeholder="Correo electrónico" 
-             style="width:100%; padding:0.75rem; margin-bottom:0.5rem; border:1px solid var(--gray-300); border-radius:0.5rem; font-size:0.9rem;">
-      <input id="authPass" type="password" placeholder="Contraseña (mín. 6 caracteres)" 
-             style="width:100%; padding:0.75rem; margin-bottom:1rem; border:1px solid var(--gray-300); border-radius:0.5rem; font-size:0.9rem;">
-      
-      <div style="display:flex; gap:0.5rem; margin-bottom:1.25rem;">
-        <button onclick="handleAuth('signup')" 
-                style="flex:1; padding:0.65rem; background:var(--primary); color:white; border:none; border-radius:0.5rem; cursor:pointer; font-weight:600; font-size:0.9rem;">Registrarse</button>
-        <button onclick="handleAuth('login')" 
-                style="flex:1; padding:0.65rem; background:var(--gray-200); color:var(--gray-800); border:1px solid var(--gray-300); border-radius:0.5rem; cursor:pointer; font-weight:600; font-size:0.9rem;">Ingresar</button>
-      </div>
-      
-      <!-- License Section -->
-      <hr style="border:0; border-top:1px solid var(--gray-200); margin:0 0 1rem 0;">
-      
-      <div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:0.5rem;">
-        <span style="font-size:1.1rem;">🎟️</span>
-        <h4 style="margin:0; font-size:0.95rem;">Canjear Licencia</h4>
-      </div>
-      
-      <p style="font-size:0.8rem; color:var(--gray-600); margin:0 0 0.5rem 0; line-height:1.4;">
-        Obtén tu código en Supabase → SQL Editor → tabla <code>licenses</code>
-      </p>
-      
-      <input id="licenseCode" placeholder="Ej: IEV-PRIME-30D-XXXX" 
-             style="width:100%; padding:0.75rem; margin-bottom:0.75rem; border:1px solid var(--gray-300); border-radius:0.5rem; font-family:monospace; font-size:0.85rem; text-transform:uppercase; letter-spacing:0.5px;">
-      
-      <button onclick="redeemLicense()" 
-              style="width:100%; padding:0.7rem; background:var(--secondary); color:white; border:none; border-radius:0.5rem; cursor:pointer; font-weight:700; font-size:0.95rem; letter-spacing:0.3px;">
-        Activar Plan
-      </button>
-      
-      <!-- User info (se muestra tras login) -->
-      <div id="userInfo" style="display:none; margin-top:1rem; padding:0.75rem; background:var(--gray-100); border-radius:0.5rem; font-size:0.85rem;">
-        <strong>Usuario:</strong> <span id="userEmail"></span><br>
-        <strong>Plan:</strong> <span id="userPlan" style="color:var(--primary); font-weight:600;"></span><br>
-        <strong>Vence:</strong> <span id="userExpiry"></span>
-      </div>
-      
-    </div>
-  </div>
-
   <!-- Toast de Notificaciones -->
   <div id="toast" class="toast"></div>
 
-  <!-- Scripts (app.js como module, plans.js normal) -->
+  <!-- Scripts -->
   <script type="module" src="js/app.js"></script>
   <script src="js/plans.js"></script>
   
@@ -212,5 +162,25 @@
         .catch(err => console.warn('⚠️ SW error:', err));
     }
   </script>
+<!-- Auth & License Modal -->
+<div id="authModal" style="position:fixed; inset:0; background:rgba(0,0,0,0.6); display:flex; align-items:center; justify-content:center; z-index:200;">
+  <div style="background:white; padding:2rem; border-radius:1rem; width:90%; max-width:400px; box-shadow:0 10px 25px rgba(0,0,0,0.2);">
+    <h2 style="margin-bottom:1rem; color:var(--primary-dark);">🔐 Acceso Inspector</h2>
+    <input id="authEmail" type="email" placeholder="Correo" style="width:100%; padding:0.75rem; margin-bottom:0.5rem; border:1px solid var(--gray-300); border-radius:0.5rem;">
+    <input id="authPass" type="password" placeholder="Contraseña" style="width:100%; padding:0.75rem; margin-bottom:0.5rem; border:1px solid var(--gray-300); border-radius:0.5rem;">
+    <div style="display:flex; gap:0.5rem; margin-bottom:1rem;">
+      <button onclick="handleAuth('signup')" style="flex:1; padding:0.6rem; background:var(--primary); color:white; border:none; border-radius:0.5rem; cursor:pointer;">Registrarse</button>
+      <button onclick="handleAuth('login')" style="flex:1; padding:0.6rem; background:var(--gray-200); border:1px solid var(--gray-300); border-radius:0.5rem; cursor:pointer;">Ingresar</button>
+    </div>
+    <hr style="border:0; border-top:1px solid var(--gray-200); margin:1rem 0;">
+    <h4 style="margin-bottom:0.5rem;">🎟️ Canjear Licencia</h4>
+    <input id="licenseCode" placeholder="Ej: IEV-PRIME-30D-xxxx" style="width:100%; padding:0.75rem; margin-bottom:0.5rem; border:1px solid var(--gray-300); border-radius:0.5rem; font-family:monospace;">
+    <button onclick="redeemLicense()" style="width:100%; padding:0.6rem; background:var(--secondary); color:white; border:none; border-radius:0.5rem; cursor:pointer; font-weight:600;">Activar Plan</button>
+  </div>
+</div>
+
+<!-- Script Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script type="module" src="js/app.js"></script>  
 </body>
 </html>
