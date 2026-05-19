@@ -1,13 +1,23 @@
 /**
  * @file js/app.js
- * @description Lógica del chat PWA + conexión al motor determinístico
- * @version 2.1 - Fix de manejo de respuestas + contenido real para tablas
+ * @description Lógica del chat PWA + Supabase Auth + Licencias + Gating por plan
+ * @version 3.0 - Auth profesional + licencias 30 días + control BASE/PRIME/APEX
  */
 
-// Estado de la sesión
+// 🔗 CONFIGURACIÓN SUPABASE (REEMPLAZA CON TUS DATOS REALES)
+const SUPABASE_URL = 'https://TU_PROYECTO.supabase.co';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.TU_ANON_KEY_AQUI';
+
+// Importar Supabase (CDN para PWA estática)
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js';
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
+
+// Estado global de sesión
 let session = {
-  usuario: null,
-  plan: null,
+  user: null,
+  plan: 'BASE',
+  license: null,
+  expiresAt: null,
   historial: [],
   parametros: {}
 };
@@ -18,99 +28,48 @@ const chatForm = document.getElementById('chatForm');
 const userInput = document.getElementById('userInput');
 const btnSend = document.getElementById('btnSend');
 const toast = document.getElementById('toast');
+const authModal = document.getElementById('authModal');
 
 // ============================================
-// FUNCIONES AUXILIARES
+// FUNCIONES AUXILIARES (formato, UI, etc.)
 // ============================================
 
-/**
- * Extrae texto legible de cualquier estructura de respuesta
- * @param {Object|string} resp - Respuesta del motor/IA
- * @returns {string} Texto formateado para mostrar
- */
 const obtenerTextoRespuesta = (resp) => {
   if (!resp) return '';
   if (typeof resp === 'string') return resp;
-  
-  // Prioridad de campos según tipo de respuesta
-  return resp.texto || 
-         resp.conclusion || 
-         resp.explicacion || 
-         resp.respuesta_directa || 
-         resp.pregunta || 
-         resp.mensaje_baymax ||
+  return resp.texto || resp.conclusion || resp.explicacion || resp.respuesta_directa || 
+         resp.pregunta || resp.mensaje || resp.mensaje_baymax || 
          (typeof resp === 'object' ? JSON.stringify(resp, null, 2) : String(resp));
 };
 
-/**
- * Formatea contenido con soporte básico de markdown (robusto)
- * @param {string|object} text - Contenido a formatear
- * @returns {string} HTML seguro para insertar en el DOM
- */
 function formatContent(text) {
-  // Convertir a string si es objeto, null o undefined
   if (!text) return '';
   if (typeof text !== 'string') {
-    try {
-      text = JSON.stringify(text, null, 2);
-    } catch {
-      return '⚠️ Respuesta no formateable';
-    }
+    try { text = JSON.stringify(text, null, 2); } catch { return '⚠️ Respuesta no formateable'; }
   }
-  
-  // Escape HTML básico para prevenir XSS
-  let html = text
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
-  
-  // Negritas **texto**
+  let html = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-  
-  // Listas con viñetas (•, -, *)
   html = html.replace(/^(•|\-|\*)\s(.+)$/gm, '<li>$2</li>');
-  // Envolver listas consecutivas en <ul>
   html = html.replace(/(<li>.+?<\/li>(?:\s*<li>.+?<\/li>)+)/g, '<ul>$1</ul>');
-  
-  // Saltos de línea
   html = html.replace(/\n/g, '<br>');
-  
   return html;
 }
 
-/**
- * Muestra indicador de "escribiendo..."
- */
 function showTypingIndicator() {
-  // Evitar duplicados
   if (document.getElementById('typingIndicator')) return;
-  
   const indicator = document.createElement('div');
   indicator.className = 'message bot typing';
   indicator.id = 'typingIndicator';
-  indicator.innerHTML = `
-    <div class="message-avatar">🤖</div>
-    <div class="message-content">
-      <div class="typing-indicator">
-        <span></span><span></span><span></span>
-      </div>
-    </div>
-  `;
+  indicator.innerHTML = `<div class="message-avatar">🤖</div><div class="message-content"><div class="typing-indicator"><span></span><span></span><span></span></div></div>`;
   chatMessages.appendChild(indicator);
   chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
-/**
- * Oculta indicador de "escribiendo..."
- */
 function hideTypingIndicator() {
-  const indicator = document.getElementById('typingIndicator');
-  if (indicator) indicator.remove();
+  const el = document.getElementById('typingIndicator');
+  if (el) el.remove();
 }
 
-/**
- * Muestra toast de notificación
- */
 function showToast(message, type = 'info') {
   if (!toast) return;
   toast.textContent = message;
@@ -118,85 +77,161 @@ function showToast(message, type = 'info') {
   setTimeout(() => toast.classList.remove('show'), 3000);
 }
 
-/**
- * Agrega mensaje al chat con formato
- */
 function addMessage(content, sender) {
   const messageEl = document.createElement('div');
   messageEl.className = `message ${sender}`;
-  
   const avatar = sender === 'bot' ? '🤖' : '🧑';
-  
-  // Formatear contenido de forma segura
   const formatted = formatContent(content);
-  
-  messageEl.innerHTML = `
-    <div class="message-avatar">${avatar}</div>
-    <div class="message-content">${formatted}</div>
-  `;
-  
+  messageEl.innerHTML = `<div class="message-avatar">${avatar}</div><div class="message-content">${formatted}</div>`;
   chatMessages.appendChild(messageEl);
   chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
 // ============================================
-// INICIALIZACIÓN
+// INICIALIZACIÓN + AUTH
 // ============================================
 
-document.addEventListener('DOMContentLoaded', () => {
-  // Cargar sesión desde localStorage si existe
+document.addEventListener('DOMContentLoaded', async () => {
+  // Cargar sesión auth de Supabase
+  const { data: { session: authSession } } = await supabase.auth.getSession();
+  
+  if (authSession?.user) {
+    await loadProfile(authSession.user.id);
+    if (authModal) authModal.style.display = 'none';
+    updatePlanUI();
+  }
+  
+  // Cargar historial local si existe
   const saved = localStorage.getItem('inspector-session');
   if (saved) {
-    try { session = { ...session, ...JSON.parse(saved) }; } catch {}
+    try { 
+      const local = JSON.parse(saved);
+      session.historial = local.historial || [];
+      session.parametros = local.parametros || {};
+    } catch {}
   }
   
-  // Actualizar UI según plan seleccionado
-  if (session.plan) {
-    document.querySelectorAll('.plan-card').forEach(card => {
-      card.classList.toggle('selected', card.dataset.plan === session.plan);
-    });
-    const paymentForm = document.getElementById('paymentForm');
-    if (paymentForm) paymentForm.style.display = 'none';
-    showToast(`Plan ${session.plan.toUpperCase()} activo`, 'success');
-  }
-  
-  // Focus en input para mejor UX
   if (userInput) userInput.focus();
 });
 
+// Cargar perfil desde Supabase
+async function loadProfile(userId) {
+  const { data, error } = await supabase.from('profiles').select('plan, license_code, expires_at').eq('id', userId).single();
+  if (error || !data) return;
+  
+  session.user = { id: userId };
+  session.plan = data.plan || 'BASE';
+  session.license = data.license_code;
+  session.expiresAt = data.expires_at;
+  
+  // Verificar expiración de licencia
+  if (data.expires_at && new Date(data.expires_at) < new Date()) {
+    session.plan = 'BASE';
+    showToast('⚠️ Licencia expirada. Plan revertido a BASE.', 'warning');
+  }
+}
+
+// Manejar login/registro
+window.handleAuth = async (type) => {
+  const email = document.getElementById('authEmail')?.value.trim();
+  const password = document.getElementById('authPass')?.value.trim();
+  
+  if (!email || !password) return showToast('Completa correo y contraseña', 'warning');
+  
+  const { error } = type === 'signup' 
+    ? await supabase.auth.signUp({ email, password })
+    : await supabase.auth.signInWithPassword({ email, password });
+  
+  if (error) return showToast(error.message, 'error');
+  
+  showToast(type === 'signup' ? '✅ Registro exitoso. Revisa tu correo.' : '✅ Sesión iniciada', 'success');
+  
+  // Recargar perfil tras auth exitoso
+  const { data: { session: authSession } } = await supabase.auth.getSession();
+  if (authSession?.user) {
+    await loadProfile(authSession.user.id);
+    if (authModal) authModal.style.display = 'none';
+    updatePlanUI();
+  }
+};
+
+// Canjear licencia
+window.redeemLicense = async () => {
+  if (!session.user) return showToast('Inicia sesión primero', 'warning');
+  
+  const code = document.getElementById('licenseCode')?.value.trim().toUpperCase();
+  if (!code) return showToast('Ingresa un código de licencia', 'warning');
+  
+  // 1. Verificar licencia en Supabase
+  const { data: lic, error: licErr } = await supabase.from('licenses')
+    .select('*').eq('code', code).single();
+  
+  if (licErr || !lic || !lic.is_active) return showToast('Licencia inválida o ya usada', 'error');
+  if (new Date(lic.expires_at) < new Date()) return showToast('Licencia expirada', 'error');
+  
+  // 2. Actualizar perfil del usuario
+  const { error: updateErr } = await supabase.from('profiles')
+    .update({ plan: lic.plan, license_code: lic.code, expires_at: lic.expires_at })
+    .eq('id', session.user.id);
+  
+  if (updateErr) return showToast('Error al activar licencia', 'error');
+  
+  // 3. Marcar licencia como usada
+  await supabase.from('licenses').update({ is_active: false, used_by: session.user.id }).eq('code', code);
+  
+  // 4. Recargar sesión
+  await loadProfile(session.user.id);
+  updatePlanUI();
+  showToast(`✅ Plan ${session.plan} activado por 30 días`, 'success');
+};
+
+// Actualizar UI de planes
+function updatePlanUI() {
+  document.querySelectorAll('.plan-card').forEach(card => {
+    card.classList.toggle('active', card.dataset.plan === session.plan);
+    card.style.pointerEvents = session.plan ? 'none' : 'auto'; // Desactivar tras activar
+  });
+  
+  // Mostrar info de expiración si existe
+  if (session.expiresAt) {
+    const expiry = new Date(session.expiresAt).toLocaleDateString('es-MX');
+    showToast(`Plan activo: ${session.plan} | Vence: ${expiry}`, 'info');
+  }
+}
+
 // ============================================
-// MANEJO DEL CHAT
+// MANEJO DEL CHAT + API
 // ============================================
 
 chatForm.addEventListener('submit', async (e) => {
   e.preventDefault();
-  
   const input = userInput.value.trim();
   if (!input) return;
   
-  // Agregar mensaje del usuario
+  // Verificar autenticación
+  if (!session.user) {
+    showToast('Inicia sesión para usar el inspector', 'warning');
+    if (authModal) authModal.style.display = 'flex';
+    return;
+  }
+  
   addMessage(input, 'user');
   userInput.value = '';
   btnSend.disabled = true;
-  
-  // Mostrar indicador de "escribiendo..."
   showTypingIndicator();
   
   try {
-    // Procesar consulta
     const response = await processQuery(input);
-    
-    // Ocultar indicador y mostrar respuesta (con extracción segura de texto)
     hideTypingIndicator();
     addMessage(obtenerTextoRespuesta(response), 'bot');
     
-    // Guardar en historial para persistencia offline
+    // Guardar en historial local
     session.historial.push({ input, response, timestamp: new Date().toISOString() });
-    localStorage.setItem('inspector-session', JSON.stringify(session));
+    localStorage.setItem('inspector-session', JSON.stringify({ historial: session.historial, parametros: session.parametros }));
     
   } catch (error) {
     hideTypingIndicator();
-    addMessage('❌ Error al procesar tu consulta. Intenta de nuevo.', 'bot');
+    addMessage('❌ Error de conexión. Verifica tu red o licencia.', 'bot');
     console.error('[App Error]:', error);
     showToast('Error de conexión', 'error');
   }
@@ -205,115 +240,91 @@ chatForm.addEventListener('submit', async (e) => {
   userInput.focus();
 });
 
-/**
- * Procesa la consulta llamando a tu API en Cloudflare Workers
- */
+// Procesar consulta con API + fallback
 async function processQuery(input) {
-  // 🔗 ⚠️ REEMPLAZA CON TU URL REAL DE CLOUDFLARE WORKERS
   const API_URL = 'https://inspector-electrico-api.dialectycam.workers.dev';
+  
+  // Obtener token de auth si existe
+  const { data: { session: authSession } } = await supabase.auth.getSession();
+  const token = authSession?.access_token || '';
   
   const sessionData = {
     plan: session.plan,
+    license: session.license,
     parametros: session.parametros,
     historial: session.historial.slice(-5)
   };
-
+  
   try {
     const response = await fetch(API_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 
+        'Content-Type': 'application/json',
+        'Authorization': token ? `Bearer ${token}` : ''
+      },
       body: JSON.stringify({ input, session: sessionData }),
-      signal: AbortSignal.timeout(10000) // 10s timeout
+      signal: AbortSignal.timeout(12000)
     });
-
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    const data = await response.json();
     
+    if (!response.ok) {
+      const errText = await response.text().catch(() => '');
+      throw new Error(`HTTP ${response.status}: ${errText}`);
+    }
+    
+    const data = await response.json();
     if (!data.success) throw new Error(data.error || 'Error en servidor');
     
     return data.respuesta;
+    
   } catch (error) {
     console.warn('[API Fallback]:', error.message);
-    // Fallback local si la API falla (offline/error temporal)
-    return processQueryLocalFallback(input);
+    return processQueryLocalFallback(input, session.plan);
   }
 }
 
-/**
- * Fallback local mínimo (mantiene la PWA funcional sin internet)
- */
-async function processQueryLocalFallback(input) {
+// Fallback local (offline o error de API)
+async function processQueryLocalFallback(input, plan = 'BASE') {
   await new Promise(r => setTimeout(r, 500));
   const texto = input.toLowerCase();
   
-  if (texto.includes('calibre') && /\d+\s*a/i.test(texto)) {
-    return { respuesta_directa: `📱 Modo offline: Para ${input}, usa la app con conexión activa para validación precisa.` };
+  // Funciones BASE disponibles offline
+  if (/calibre.*\d+\s*a|\d+\s*a.*calibre/i.test(texto)) {
+    const amp = parseInt(texto.match(/(\d+)\s*a/i)?.[1]);
+    if (amp) {
+      const awg = amp <= 20 ? '14' : amp <= 35 ? '12' : amp <= 50 ? '10' : amp <= 65 ? '8' : '6';
+      return { respuesta_directa: `📱 Offline: Para ${amp}A → ${awg} AWG cobre (THW). *Conecta para validación oficial NOM-001*` };
+    }
   }
+  
+  if (texto.includes('puesta a tierra') && /\d+\s*awg/i.test(texto) && /(\d+)\s*a(?!\s*wg)/i.test(texto)) {
+    return { pregunta: `📱 Offline: Validación de puesta a tierra requiere conexión. *Conecta para verificar con Tabla 250-122*` };
+  }
+  
+  // Funciones PRIME/APEX bloqueadas offline
+  if (texto.includes('motor') && plan !== 'BASE') {
+    return { error: `🔒 Función de motores requiere conexión activa (Plan ${plan})` };
+  }
+  
   return { pregunta: "⚠️ Sin conexión. Reconecta para validar con la NOM-001-SEDE-2012." };
 }
 
 // ============================================
-// FUNCIONES GLOBALES (para onclick en HTML)
+// FUNCIONES GLOBALES (UI helpers)
 // ============================================
 
-window.fillInput = (text) => {
-  if (userInput) {
-    userInput.value = text;
-    userInput.focus();
-  }
-};
+window.fillInput = (text) => { if (userInput) { userInput.value = text; userInput.focus(); } };
 
 window.selectPlan = (plan) => {
+  // Solo para demo/preview - en producción el plan viene de licencia
   session.plan = plan;
-  localStorage.setItem('inspector-session', JSON.stringify(session));
-  
-  // Actualizar UI de tarjetas
-  document.querySelectorAll('.plan-card').forEach(card => {
-    card.classList.toggle('selected', card.dataset.plan === plan);
-  });
-  
-  // Mostrar formulario de pago si aplica
-  const paymentForm = document.getElementById('paymentForm');
-  const refCode = document.getElementById('refCode');
-  
-  if (paymentForm && refCode) {
-    if (plan && plan !== 'free') {
-      refCode.textContent = Math.random().toString(36).substr(2, 6).toUpperCase();
-      paymentForm.style.display = 'block';
-      showToast(`Plan ${plan.toUpperCase()} seleccionado. Sube tu comprobante para activar.`, 'success');
-    } else {
-      paymentForm.style.display = 'none';
-      showToast('Plan gratuito activado. Algunas funciones están limitadas.', 'info');
-    }
-  }
+  updatePlanUI();
+  showToast(`Preview: Plan ${plan.toUpperCase()} seleccionado`, 'info');
 };
 
 window.submitPayment = () => {
-  const proofFile = document.getElementById('proofFile');
-  const file = proofFile?.files?.[0];
-  
-  if (!file) {
-    showToast('Selecciona un archivo de comprobante', 'error');
-    return;
-  }
-  
-  // Simular envío (aquí iría upload real a Supabase/email)
-  showToast('✅ Comprobante enviado. Activación en 24-48 horas.', 'success');
-  
-  const paymentForm = document.getElementById('paymentForm');
-  if (paymentForm) paymentForm.style.display = 'none';
-  
-  // Aquí iría la lógica real:
-  // await uploadComprobante(file, session.plan, session.usuario);
+  showToast('✅ Comprobante enviado. Activación en 24-48h (simulado)', 'success');
 };
 
-// ============================================
-// UTILIDADES ADICIONALES
-// ============================================
-
-/**
- * Limpia el historial del chat (para debug o nueva sesión)
- */
 window.clearChat = () => {
   if (confirm('¿Limpiar historial del chat?')) {
     session.historial = [];
@@ -323,9 +334,6 @@ window.clearChat = () => {
   }
 };
 
-/**
- * Exporta el historial como JSON (para backup o soporte)
- */
 window.exportHistory = () => {
   const blob = new Blob([JSON.stringify(session.historial, null, 2)], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
@@ -335,4 +343,13 @@ window.exportHistory = () => {
   a.click();
   URL.revokeObjectURL(url);
   showToast('Historial exportado', 'success');
+};
+
+window.logout = async () => {
+  await supabase.auth.signOut();
+  session = { user: null, plan: 'BASE', license: null, expiresAt: null, historial: [], parametros: {} };
+  localStorage.removeItem('inspector-session');
+  if (authModal) authModal.style.display = 'flex';
+  updatePlanUI();
+  showToast('Sesión cerrada', 'info');
 };
