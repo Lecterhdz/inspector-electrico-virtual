@@ -284,7 +284,7 @@ window.redeemLicense = async () => {
     // 3. Marcar como usada
     const { error: markErr } = await supabase
       .from('licenses')
-      .update({ is_active: false })  // ← Solo lo que sí existe
+      .update({ is_active: false, used_by: session.user.id })  // ← Solo lo que sí existe
       .eq('code', code);
       
     if (markErr) throw new Error('Error al marcar usada: ' + markErr.message);
