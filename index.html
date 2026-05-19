@@ -161,5 +161,25 @@
         .catch(err => console.warn('⚠️ SW error:', err));
     }
   </script>
+<!-- Auth & License Modal -->
+<div id="authModal" style="position:fixed; inset:0; background:rgba(0,0,0,0.6); display:flex; align-items:center; justify-content:center; z-index:200;">
+  <div style="background:white; padding:2rem; border-radius:1rem; width:90%; max-width:400px; box-shadow:0 10px 25px rgba(0,0,0,0.2);">
+    <h2 style="margin-bottom:1rem; color:var(--primary-dark);">🔐 Acceso Inspector</h2>
+    <input id="authEmail" type="email" placeholder="Correo" style="width:100%; padding:0.75rem; margin-bottom:0.5rem; border:1px solid var(--gray-300); border-radius:0.5rem;">
+    <input id="authPass" type="password" placeholder="Contraseña" style="width:100%; padding:0.75rem; margin-bottom:0.5rem; border:1px solid var(--gray-300); border-radius:0.5rem;">
+    <div style="display:flex; gap:0.5rem; margin-bottom:1rem;">
+      <button onclick="handleAuth('signup')" style="flex:1; padding:0.6rem; background:var(--primary); color:white; border:none; border-radius:0.5rem; cursor:pointer;">Registrarse</button>
+      <button onclick="handleAuth('login')" style="flex:1; padding:0.6rem; background:var(--gray-200); border:1px solid var(--gray-300); border-radius:0.5rem; cursor:pointer;">Ingresar</button>
+    </div>
+    <hr style="border:0; border-top:1px solid var(--gray-200); margin:1rem 0;">
+    <h4 style="margin-bottom:0.5rem;">🎟️ Canjear Licencia</h4>
+    <input id="licenseCode" placeholder="Ej: IEV-PRIME-30D-xxxx" style="width:100%; padding:0.75rem; margin-bottom:0.5rem; border:1px solid var(--gray-300); border-radius:0.5rem; font-family:monospace;">
+    <button onclick="redeemLicense()" style="width:100%; padding:0.6rem; background:var(--secondary); color:white; border:none; border-radius:0.5rem; cursor:pointer; font-weight:600;">Activar Plan</button>
+  </div>
+</div>
+
+<!-- Script Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script type="module" src="js/app.js"></script>  
 </body>
 </html>
