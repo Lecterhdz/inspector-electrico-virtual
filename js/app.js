@@ -9,7 +9,7 @@ const SUPABASE_URL = 'https://TU_PROYECTO.supabase.co';
 const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.TU_ANON_KEY_AQUI';
 
 // Importar Supabase (CDN para PWA estática)
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
 
 // Estado global de sesión
