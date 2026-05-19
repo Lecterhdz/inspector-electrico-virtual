@@ -353,3 +353,12 @@ window.logout = async () => {
   updatePlanUI();
   showToast('Sesión cerrada', 'info');
 };
+// Al final de js/app.js, después de definir las funciones:
+window.handleAuth = handleAuth;
+window.redeemLicense = redeemLicense;
+window.fillInput = fillInput;
+window.selectPlan = selectPlan;
+window.submitPayment = submitPayment;
+window.clearChat = clearChat;
+window.exportHistory = exportHistory;
+window.logout = logout;
