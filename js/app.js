@@ -1,7 +1,7 @@
 /**
  * @file js/app.js
  * @description Lógica del chat PWA + Supabase Auth + Licencias + Gating por plan
- * @version 3.0 - Auth profesional + licencias 30 días + control BASE/PRIME/APEX
+ * @version 3.1 - Compact UI + badge plan + info usuario en modal
  */
 
 // 🔗 CONFIGURACIÓN SUPABASE (REEMPLAZA CON TUS DATOS REALES)
@@ -22,13 +22,15 @@ let session = {
   parametros: {}
 };
 
-// Referencias DOM
+// Referencias DOM (con fallback seguro)
 const chatMessages = document.getElementById('chatMessages');
 const chatForm = document.getElementById('chatForm');
 const userInput = document.getElementById('userInput');
 const btnSend = document.getElementById('btnSend');
 const toast = document.getElementById('toast');
 const authModal = document.getElementById('authModal');
+const planBadge = document.getElementById('planBadge');
+const plansCompact = document.getElementById('plansCompact');
 
 // ============================================
 // FUNCIONES AUXILIARES (formato, UI, etc.)
@@ -92,6 +94,15 @@ function addMessage(content, sender) {
 // ============================================
 
 document.addEventListener('DOMContentLoaded', async () => {
+  // Configurar modal: cerrar al hacer click fuera
+  if (authModal) {
+    authModal.addEventListener('click', (e) => {
+      if (e.target === authModal) {
+        authModal.style.display = 'none';
+      }
+    });
+  }
+  
   // Cargar sesión auth de Supabase
   const { data: { session: authSession } } = await supabase.auth.getSession();
   
@@ -99,6 +110,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     await loadProfile(authSession.user.id);
     if (authModal) authModal.style.display = 'none';
     updatePlanUI();
+    updateUserInfoModal(); // Mostrar info de usuario en modal
   }
   
   // Cargar historial local si existe
@@ -119,7 +131,7 @@ async function loadProfile(userId) {
   const { data, error } = await supabase.from('profiles').select('plan, license_code, expires_at').eq('id', userId).single();
   if (error || !data) return;
   
-  session.user = { id: userId };
+  session.user = { id: userId, email: data.email };
   session.plan = data.plan || 'BASE';
   session.license = data.license_code;
   session.expiresAt = data.expires_at;
@@ -152,6 +164,7 @@ window.handleAuth = async (type) => {
     await loadProfile(authSession.user.id);
     if (authModal) authModal.style.display = 'none';
     updatePlanUI();
+    updateUserInfoModal();
   }
 };
 
@@ -182,20 +195,55 @@ window.redeemLicense = async () => {
   // 4. Recargar sesión
   await loadProfile(session.user.id);
   updatePlanUI();
+  updateUserInfoModal();
   showToast(`✅ Plan ${session.plan} activado por 30 días`, 'success');
+  
+  // Limpiar campo de licencia
+  const licenseInput = document.getElementById('licenseCode');
+  if (licenseInput) licenseInput.value = '';
 };
 
-// Actualizar UI de planes
+// Actualizar UI de planes (soporta .plan-card y .plan-card-mini)
 function updatePlanUI() {
+  // Actualizar badge en header
+  if (planBadge) {
+    planBadge.textContent = session.plan;
+    planBadge.className = `badge ${session.plan.toLowerCase()}`;
+  }
+  
+  // Actualizar cards grandes (sidebar desktop)
   document.querySelectorAll('.plan-card').forEach(card => {
     card.classList.toggle('active', card.dataset.plan === session.plan);
-    card.style.pointerEvents = session.plan ? 'none' : 'auto'; // Desactivar tras activar
+    card.style.pointerEvents = session.plan ? 'none' : 'auto';
+  });
+  
+  // Actualizar cards compactas (móvil)
+  document.querySelectorAll('.plan-card-mini').forEach(card => {
+    card.classList.toggle('active', card.dataset.plan === session.plan);
+    card.style.pointerEvents = session.plan ? 'none' : 'auto';
   });
   
   // Mostrar info de expiración si existe
   if (session.expiresAt) {
     const expiry = new Date(session.expiresAt).toLocaleDateString('es-MX');
-    showToast(`Plan activo: ${session.plan} | Vence: ${expiry}`, 'info');
+    showToast(`Plan ${session.plan} activo | Vence: ${expiry}`, 'info');
+  }
+}
+
+// Actualizar info de usuario en modal
+function updateUserInfoModal() {
+  const userInfo = document.getElementById('userInfo');
+  const userEmail = document.getElementById('userEmail');
+  const userPlan = document.getElementById('userPlan');
+  const userExpiry = document.getElementById('userExpiry');
+  
+  if (userInfo && userEmail && userPlan && userExpiry && session.user) {
+    userInfo.style.display = 'block';
+    userEmail.textContent = session.user.email || 'Usuario';
+    userPlan.textContent = session.plan;
+    userExpiry.textContent = session.expiresAt 
+      ? new Date(session.expiresAt).toLocaleDateString('es-MX') 
+      : 'Sin expiración';
   }
 }
 
@@ -312,7 +360,12 @@ async function processQueryLocalFallback(input, plan = 'BASE') {
 // FUNCIONES GLOBALES (UI helpers)
 // ============================================
 
-window.fillInput = (text) => { if (userInput) { userInput.value = text; userInput.focus(); } };
+window.fillInput = (text) => { 
+  if (userInput) { 
+    userInput.value = text; 
+    userInput.focus(); 
+  } 
+};
 
 window.selectPlan = (plan) => {
   // Solo para demo/preview - en producción el plan viene de licencia
@@ -349,16 +402,16 @@ window.logout = async () => {
   await supabase.auth.signOut();
   session = { user: null, plan: 'BASE', license: null, expiresAt: null, historial: [], parametros: {} };
   localStorage.removeItem('inspector-session');
+  
+  // Resetear UI
   if (authModal) authModal.style.display = 'flex';
   updatePlanUI();
+  
+  // Ocultar info de usuario en modal
+  const userInfo = document.getElementById('userInfo');
+  if (userInfo) userInfo.style.display = 'none';
+  
   showToast('Sesión cerrada', 'info');
 };
-// Al final de js/app.js, después de definir las funciones:
-window.handleAuth = handleAuth;
-window.redeemLicense = redeemLicense;
-window.fillInput = fillInput;
-window.selectPlan = selectPlan;
-window.submitPayment = submitPayment;
-window.clearChat = clearChat;
-window.exportHistory = exportHistory;
-window.logout = logout;
+
+// ✅ Funciones ya están expuestas con window.X = ... arriba, no se necesitan duplicados al final
