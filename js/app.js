@@ -210,7 +210,7 @@ chatForm.addEventListener('submit', async (e) => {
  */
 async function processQuery(input) {
   // 🔗 ⚠️ REEMPLAZA CON TU URL REAL DE CLOUDFLARE WORKERS
-  const API_URL = 'inspector-electrico-api.dialectycam.workers.dev';
+  const API_URL = 'https://inspector-electrico-api.dialectycam.workers.dev';
   
   const sessionData = {
     plan: session.plan,
