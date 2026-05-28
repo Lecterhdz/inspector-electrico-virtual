@@ -1,0 +1,141 @@
+{
+  "id": "nom-001-445",
+  "tipo": "articulo",
+  "numero": "445",
+  "titulo": "Generadores",
+  "texto": "Este Artículo contiene la instalación y los requisitos para los generadores.",
+  "secciones": [
+    {
+      "subseccion": "445-1",
+      "titulo": "Alcance",
+      "contenido": "Este Artículo contiene la instalación y los requisitos para los generadores."
+    },
+    {
+      "subseccion": "445-10",
+      "titulo": "Ubicación",
+      "contenido": "Los generadores deben ser de un tipo adecuado para el lugar donde vayan a estar instalados. Además, deben cumplir los requisitos para motores que establece 430-14."
+    },
+    {
+      "subseccion": "445-11",
+      "titulo": "Marcado",
+      "contenido": "Todos los generadores deben tener una placa de características en la que conste el nombre del fabricante, la frecuencia nominal, el factor de potencia, el número de fases si son de corriente alterna, las impedancias transitoria y subtransitoria, el valor nominal en kilowatt o kilovoltampere, la tensión y corriente normales correspondientes a su valor nominal, las revoluciones por minuto nominales, la clase del sistema de aislamiento, la temperatura ambiente nominal o el aumento nominal de temperatura y su tiempo nominal de funcionamiento."
+    },
+    {
+      "subseccion": "445-12",
+      "titulo": "Protección contra sobrecorriente",
+      "contenido": "Los generadores deben estar protegidos contra sobrecargas según su tipo. Para generadores de tensión constante, excepto excitadores, deben estar protegidos con interruptores automáticos, fusibles, relevadores de protección u otro medio identificado. Para generadores de 2 hilos de corriente continua, se permite protección en sólo un conductor. Para generadores de 65 volts o menos accionados por motores, se consideran protegidos por el dispositivo del motor si opera hasta 150% de corriente nominal. Para sistemas compensadores de 2 hilos, deben equiparse con protección que desconecte el sistema de 3 hilos por desequilibrio. Para generadores de 3 hilos de corriente continua, deben tener protección en cada punta de la armadura. Excepción: cuando el generador es vital para la operación, se permite solo alarma en lugar de interrupción.",
+      "subsecciones": [
+        {
+          "subseccion": "445-12(a)",
+          "titulo": "Generadores de tensión constante",
+          "contenido": "Los generadores de tensión constante, excepto los excitadores de generadores de corriente alterna, deben estar protegidos contra sobrecargas por su propio diseño, con interruptores automáticos, fusibles, relevadores de protección u otro medio identificado de protección contra sobrecorriente adecuado para las condiciones de uso."
+        },
+        {
+          "subseccion": "445-12(b)",
+          "titulo": "Generadores de 2 hilos",
+          "contenido": "Se permitirá que los generadores de 2 hilos de corriente continua estén protegidos contra sobrecorriente en sólo un conductor, si el dispositivo de protección es accionado por toda la corriente generada distinta de la del campo en derivación. El dispositivo de protección contra sobrecorriente no debe abrir el campo en derivación."
+        },
+        {
+          "subseccion": "445-12(c)",
+          "titulo": "De 65 volts o menos",
+          "contenido": "Los generadores que operen a 65 volts o menos y son accionados por motores individuales, se deben considerar como protegidos por el dispositivo de protección contra sobrecorriente del motor si ese dispositivo opera cuando los generadores estén entregando no más del 150 por ciento de su corriente nominal de plena carga."
+        },
+        {
+          "subseccion": "445-12(d)",
+          "titulo": "Sistemas compensadores",
+          "contenido": "Los generadores de 2 hilos de corriente continua que se utilicen junto con sistemas compensadores para obtener puntos neutros para sistemas de 3 hilos, deben estar equipados con dispositivos de protección contra sobrecorriente que desconecten el sistema de 3 hilos si se produce un desequilibrio excesivo de tensiones o corrientes."
+        },
+        {
+          "subseccion": "445-12(e)",
+          "titulo": "Generadores de 3 hilos de corriente continua",
+          "contenido": "Los generadores de 3 hilos de corriente continua, ya sea con devanado compuesto o en derivación, deben estar equipados con dispositivos de protección contra sobrecorriente, uno en cada punta de la armadura y conectadas de modo que sean accionados por toda la corriente de la armadura. Dichos dispositivos de protección contra sobrecorriente deben ser interruptores automáticos bipolares y de doble bobina, o de 4 hilos conectados a las terminales principales y del compensador y que sean disparados por dos dispositivos de protección contra sobrecorriente, uno en cada punta de la armadura. Dichos dispositivos de protección deben estar bloqueados de modo que no se pueda abrir ningún polo sin que se desconecten simultáneamente del sistema las dos puntas de la armadura."
+        }
+      ]
+    },
+    {
+      "subseccion": "445-13",
+      "titulo": "Ampacidad de los conductores",
+      "contenido": "La ampacidad de los conductores, desde las terminales del generador hasta el primer dispositivo de distribución que contiene protección contra sobrecorriente, no debe ser menor al 115 por ciento de la corriente nominal marcada en la placa de características del generador. Se permitirá dimensionar los conductores del neutro de acuerdo con 220-61. Los conductores que deban conducir las corrientes de falla a tierra no deben ser más pequeños de lo requerido en 250-30(a). Los conductores del neutro de generadores de corriente continua que deban conducir las corrientes de falla a tierra no deben tener un tamaño menor al tamaño mínimo requerido al conductor más grande. Excepción: Cuando el diseño y funcionamiento del generador eviten las sobrecargas, la ampacidad de los conductores no debe ser menor al 100 por ciento de la corriente nominal indicada en la placa de características del generador."
+    },
+    {
+      "subseccion": "445-14",
+      "titulo": "Protección de las partes vivas",
+      "contenido": "Las partes vivas de los generadores que funcionen a más de 50 volts a tierra, no deben estar expuestas a contactos accidentales cuando sean accesibles a personas no calificadas."
+    },
+    {
+      "subseccion": "445-15",
+      "titulo": "Protección para los operadores",
+      "contenido": "Cuando sea necesario para la seguridad de las personas encargadas del equipo, se deben aplicar los requisitos de 430-233."
+    },
+    {
+      "subseccion": "445-16",
+      "titulo": "Pasacables",
+      "contenido": "Cuando los cables pasen por una abertura de un envolvente, una caja de tubo conduit o una barrera, se deben proteger de los bordes cortantes de dicha abertura mediante un pasacables. La superficie del pasacables que pueda estar en contacto con los cables, debe ser lisa y redondeada. Si el pasacables se usa en lugares donde pueda haber aceite, grasa u otros contaminantes, el pasacables debe estar hecho de un material que no resulte afectado por ellos."
+    },
+    {
+      "subseccion": "445-17",
+      "titulo": "Cajas de las terminales de los generadores",
+      "contenido": "Las cajas de las terminales de los generadores deben cumplir con 430-12. Cuando se necesite el valor nominal en caballos de fuerza para determinar el tamaño mínimo requerido de la caja de las terminales del generador, la corriente de plena carga del generador se debe comparar con motores similares en las Tablas 430-247 hasta 430-250. Se debe usar el valor nominal en caballos de fuerza más alto de las Tablas 430-247 y 430-250 siempre que la selección del generador esté entre dos valores nominales."
+    },
+    {
+      "subseccion": "445-18",
+      "titulo": "Medios de desconexión requeridos para los generadores",
+      "contenido": "Los generadores deben estar equipados con un desconectador, que se pueda bloquear en la posición abierta, por medio del cual el generador y todos los dispositivos de protección y aparatos de control se puedan desconectar completamente de los circuitos alimentados por el generador, excepto cuando se aplican las dos condiciones siguientes: (1) El medio de accionamiento del generador que lo pueda parar fácilmente. (2) El generador no está dispuesto para operar en paralelo con otro generador u otra fuente de tensión."
+    },
+    {
+      "subseccion": "445-19",
+      "titulo": "Generadores que alimentan cargas múltiples",
+      "contenido": "Se permitirá que un solo generador que alimenta más de una carga o varios generadores que operan en paralelo alimente cualquiera de los siguientes elementos: (1) Un tablero de distribución vertical con secciones separadas. (2) Envolventes individuales con protección contra sobrecorriente derivada desde un solo alimentador para la separación y distribución de la carga si un generador es suministrado con protección contra sobrecorriente cumpliendo los requisitos de 240-15(a)."
+    }
+  ],
+  "excepcion": {
+    "referencia": "445-12 Excepción",
+    "contenido": "Cuando se considere que un generador es vital para el funcionamiento de una instalación eléctrica y debe funcionar hasta que falle, para evitar mayores riesgos a las personas, se permitirá que el dispositivo sensor de sobrecarga estén conectados a un indicador o alarma supervisados por personal autorizado, en lugar de interrumpir el circuito del generador."
+  },
+  "tablas_relacionadas": [
+    "430-247",
+    "430-250"
+  ],
+  "articulos_relacionados": [
+    "220-61",
+    "240-15(a)",
+    "250-30(a)",
+    "430-12",
+    "430-14",
+    "430-233"
+  ],
+  "tags": [
+    "generador",
+    "generator",
+    "planta de emergencia",
+    "backup",
+    "respaldo",
+    "protección",
+    "conductores",
+    "ubicación",
+    "desconexión",
+    "terminales"
+  ],
+  "keywords": [
+    "ampacidad conductores generador",
+    "protección generador",
+    "desconectador generador",
+    "115 por ciento",
+    "marcado generador",
+    "pasacables",
+    "caja terminales"
+  ],
+  "nivel_prioridad": "ALTA",
+  "casos_uso": [
+    "diseño de planta de emergencia",
+    "instalación de generador de respaldo",
+    "dimensionamiento de conductores para generador",
+    "protección de generador",
+    "ubicación de generador en sitio industrial"
+  ],
+  "warning": "⚠️ Los generadores de respaldo requieren coordinación con el sistema de transferencia automática (ATS) y la protección debe coordinarse según Art. 700 para sistemas de emergencia.",
+  "ejemplo": "Generador de 100 kW, 220A nominal: conductores deben tener ampacidad mínima de 220A × 1.15 = 253A → calibre 4/0 AWG (260A) o 250 kcmil.",
+  "version": "2012",
+  "extracted_at": "2025-05-28T00:00:00.000Z",
+  "tokens_estimados": 2850
+}
