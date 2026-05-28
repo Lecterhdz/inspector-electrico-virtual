@@ -1,0 +1,206 @@
+{
+  "meta": {
+    "version": "1.0.0",
+    "ultima_actualizacion": "2025-05-28T00:00:00.000Z",
+    "norma": "NOM-001-SEDE-2012"
+  },
+  "id": "nom-001-504",
+  "tipo": "articulo",
+  "numero": "504",
+  "titulo": "Sistemas intrínsecamente seguros",
+  "texto": "Este Artículo cubre la instalación de aparatos intrínsecamente seguros (I.S.), alambrado y sistemas para áreas Clase I, II y III.",
+  "definiciones": [
+    {
+      "termino": "Aparatos asociados",
+      "definicion": "Aparatos en los que los circuitos en sí no son necesariamente intrínsecamente seguros, pero que afectan la energía en circuitos intrínsecamente seguros y de los cuales se depende para mantener la seguridad intrínseca. Pueden ser: (1) Aparatos eléctricos que tengan un tipo de protección alterna para uso en áreas peligrosas (clasificadas) apropiadas; o (2) Aparatos eléctricos no protegidos así, los cuales no deben utilizarse dentro de un área peligrosa (clasificada). NOTA: Un ejemplo de aparato asociado es una barrera intrínsecamente segura, la cual es una red diseñada para limitar la energía (corriente y tensión), disponible para el circuito protegido en áreas peligrosas (clasificadas), bajo condiciones específicas de falla."
+    },
+    {
+      "termino": "Aparato intrínsecamente seguro",
+      "definicion": "Aparato en el cual todos los circuitos son intrínsecamente seguros."
+    },
+    {
+      "termino": "Aparato sencillo",
+      "definicion": "Componente eléctrico o combinación de componentes de construcción sencilla con parámetros eléctricos bien definidos que no genera más de 1.5 volts, 100 miliamperes y 25 miliwatts, o un componente pasivo que no disipa más de 1.3 watts y es compatible con la seguridad intrínseca del circuito en el cual se utiliza. NOTA: Ejemplos: interruptores, cajas de empalme, dispositivos resistivos de temperatura, LED, termopares y fotoceldas."
+    },
+    {
+      "termino": "Circuito intrínsecamente seguro",
+      "definicion": "Circuito en el cual cualquier chispa o efecto térmico es incapaz de causar la ignición de una mezcla de material combustible o inflamable en aire bajo condiciones de prueba determinadas."
+    },
+    {
+      "termino": "Sistema intrínsecamente seguro",
+      "definicion": "Un ensamble de aparatos intrínsecamente seguros interconectados con aparatos asociados y cables de conexión en los que aquellas partes del sistema que puedan ser utilizadas en un área peligrosa (clasificada), son circuitos intrínsecamente seguros. NOTA: Un sistema intrínsecamente seguro puede incluir más de un circuito intrínsecamente seguro."
+    }
+  ],
+  "secciones": [
+    {
+      "subseccion": "504-1",
+      "titulo": "Alcance",
+      "contenido": "Este Artículo cubre la instalación de aparatos intrínsecamente seguros (I.S.), alambrado y sistemas para áreas Clase I, II y III."
+    },
+    {
+      "subseccion": "504-2",
+      "titulo": "Definiciones",
+      "contenido": "Incluye definiciones de Aparatos asociados, Aparato intrínsecamente seguro, Aparato sencillo, Circuito intrínsecamente seguro, Sistema intrínsecamente seguro."
+    },
+    {
+      "subseccion": "504-3",
+      "titulo": "Aplicación de otros Artículos",
+      "contenido": "A excepción de lo modificado por este Artículo, todos los Artículos aplicables de esta NOM deben cumplirse."
+    },
+    {
+      "subseccion": "504-4",
+      "titulo": "Equipos",
+      "contenido": "Todo aparato intrínsecamente seguro y aparatos asociados deben estar aprobados. Excepción: Un aparato simple no requiere estar aprobado."
+    },
+    {
+      "subseccion": "504-10",
+      "titulo": "Instalación de equipo",
+      "contenido": "Los aparatos intrínsecamente seguros, aparatos asociados y otros equipos, deben instalarse de acuerdo con lo indicado en los diagramas de control. Excepción: Un aparato simple que no interconecta circuitos intrínsecamente seguros.",
+      "subsecciones": [
+        {
+          "subseccion": "504-10(a)",
+          "titulo": "Diagrama de control",
+          "contenido": "Los aparatos intrínsecamente seguros, aparatos asociados y otros equipos, deben instalarse de acuerdo con lo indicado en los diagramas de control. NOTA: La identificación del diagrama de control está marcada sobre el aparato."
+        },
+        {
+          "subseccion": "504-10(b)",
+          "titulo": "Ubicación",
+          "contenido": "Los aparatos intrínsecamente seguros y aparatos asociados pueden instalarse en cualquier área peligrosa (clasificada) para la cual han sido aprobados. Se permite el uso de envolventes de usos generales para aparatos intrínsecamente seguros.",
+          "tabla": {
+            "nombre": "Tabla 504-10(b) - Evaluación para la clasificación T4",
+            "encabezados": ["Area superficial total", "Requisito para la clasificación T4"],
+            "filas": [
+              ["<20 mm²", "Temperatura superficial ≤275 °C"],
+              ["≥20 mm² ≤10 cm²", "Temperatura superficial ≤200 °C"],
+              ["≥20 mm²", "Potencia que no excede 1.3 W*"]
+            ],
+            "notas": ["* Basada en una temperatura ambiente de 40 °C. Reducir a 1.2 watts con temperatura ambiente de 60 ºC o a 1.0 watt con temperatura ambiente de 80 ºC"]
+          }
+        }
+      ]
+    },
+    {
+      "subseccion": "504-20",
+      "titulo": "Métodos de alambrado",
+      "contenido": "Se permite instalar aparatos intrínsecamente seguros y su alambrado, utilizando cualquiera de los métodos de alambrado adecuados para áreas no clasificadas, incluyendo aquellos cubiertos en los Capítulos 7 y 8. La aplicación de sellos debe ser como se indica en 504-70, y la separación debe ser como la indicada en 504-30."
+    },
+    {
+      "subseccion": "504-30",
+      "titulo": "Separación de conductores intrínsecamente seguros",
+      "contenido": "Los conductores de circuitos intrínsecamente seguros no deben colocarse en canalizaciones, charolas portacables o cables con conductores que no sean de circuito intrínsecamente seguros.",
+      "subsecciones": [
+        {
+          "subseccion": "504-30(a)",
+          "titulo": "De conductores de circuitos no intrínsecamente seguros",
+          "contenido": "Excepciones: 1) Separación mínima de 50 mm o división metálica puesta a tierra. 2) Cables con cubierta o armadura metálica puesta a tierra. 3) Instalación en División 2 o Zona 2. 4) Circuitos que pasan de División 2 a División 1."
+        },
+        {
+          "subseccion": "504-30(b)",
+          "titulo": "De conductores de circuitos intrínsecamente seguros diferentes",
+          "contenido": "La separación entre dos terminales para la conexión en campo del cableado de diferentes circuitos intrínsecamente seguros debe ser al menos 6 milímetros. Los circuitos intrínsecamente seguros diferentes deben estar en cables separados, o separados por pantalla metálica puesta a tierra o aislamiento mínimo de 0.25 mm."
+        }
+      ]
+    },
+    {
+      "subseccion": "504-50",
+      "titulo": "Puesta a tierra",
+      "contenido": "Deben ponerse a tierra los aparatos intrínsecamente seguros, aparatos asociados, pantallas metálicas, envolventes y canalizaciones, si son metálicas. Los aparatos asociados y los blindajes de los cables se deben poner a tierra de acuerdo con el plano de control exigido."
+    },
+    {
+      "subseccion": "504-60",
+      "titulo": "Unión",
+      "contenido": "En áreas peligrosas, los aparatos intrínsecamente seguros deben estar unidos de acuerdo con 250-100. En áreas no clasificadas, donde se utilicen canalizaciones metálicas, los aparatos asociados deben estar unidos según 501-30(a), 502-30(a), 503-30(a), 505-25 o 506-25."
+    },
+    {
+      "subseccion": "504-70",
+      "titulo": "Sellado",
+      "contenido": "Los cables y tubo conduit que deban sellarse de acuerdo con 501-15, 502-15, 505-16 y 506-16, deben sellarse para reducir al mínimo el paso de gases, vapores y polvos. Excepción: No se requieren sellos para envolventes que contengan únicamente aparatos intrínsecamente seguros, excepto por lo requerido en 501-17."
+    },
+    {
+      "subseccion": "504-80",
+      "titulo": "Identificación",
+      "contenido": "Las etiquetas deben ser adecuadas para el ambiente donde se instalen.",
+      "subsecciones": [
+        {
+          "subseccion": "504-80(a)",
+          "titulo": "Terminales",
+          "contenido": "Los circuitos intrínsecamente seguros deben identificarse en las terminales y empalmes, de modo que se evite la interferencia no intencional."
+        },
+        {
+          "subseccion": "504-80(b)",
+          "titulo": "Alambrado",
+          "contenido": "Las canalizaciones, charolas portacables, y otros métodos de alambrado para sistemas intrínsecamente seguros, deben identificarse con etiquetas con la leyenda 'Alambrado intrínsecamente seguro' o su equivalente, con espaciamiento no mayor a 7.50 metros."
+        },
+        {
+          "subseccion": "504-80(c)",
+          "titulo": "Código de color",
+          "contenido": "Se permite el uso de color azul claro para identificar conductores intrínsecamente seguros, siempre que no se utilicen otros conductores con este mismo color. También para canalizaciones, charolas portacables y cajas registro de empalme."
+        }
+      ]
+    }
+  ],
+  "tablas_relacionadas": ["504-10(b)"],
+  "articulos_relacionados": [
+    "250-52",
+    "250-30",
+    "250-100",
+    "330",
+    "332",
+    "500",
+    "501",
+    "502",
+    "503",
+    "505",
+    "506",
+    "501-15",
+    "502-15",
+    "505-16",
+    "506-16",
+    "501-17"
+  ],
+  "tags": [
+    "intrinsecamente seguro",
+    "504",
+    "IS",
+    "área peligrosa",
+    "atmósfera explosiva",
+    "certificación",
+    "cable azul",
+    "zonas clasificadas",
+    "barrera",
+    "aparato asociado",
+    "aparato sencillo",
+    "circuito IS",
+    "clase I",
+    "clase II",
+    "clase III",
+    "separacion 50mm",
+    "azul claro"
+  ],
+  "keywords": [
+    "sistema intrínsecamente seguro",
+    "alambrado intrínsecamente seguro",
+    "cable intrínsecamente seguro",
+    "certificación intrínsecamente segura",
+    "barrera zener",
+    "aparato sencillo",
+    "circuito IS",
+    "clasificación T4",
+    "separación 50 mm",
+    "identificación azul claro"
+  ],
+  "nivel_prioridad": "ALTA",
+  "casos_uso": [
+    "diseño de instrumentación en refinerías",
+    "instalación en plantas químicas",
+    "certificación de equipos para zona clasificada",
+    "inspección de sistemas IS",
+    "selección de barreras de seguridad",
+    "identificación de cables en áreas peligrosas"
+  ],
+  "warning": "⚠️ Este artículo aplica EXCLUSIVAMENTE para áreas clasificadas Clase I, II, III. Requiere certificación de laboratorio aprobado (UL 913, FM 3610, CSA 22.2 No. 157). Los aparatos asociados deben instalarse según diagrama de control aprobado.",
+  "ejemplo": "Transmisor de presión en zona Clase I, División 1: debe ser certificado IS, conectado con cable azul claro, separado de cables de potencia por 50 mm, con barrera zener en área no clasificada, identificado con etiqueta 'Alambrado intrínsecamente seguro' cada 7.5 m.",
+  "version": "2012",
+  "extracted_at": "2025-05-28T00:00:00.000Z",
+  "tokens_estimados": 5200
+}
