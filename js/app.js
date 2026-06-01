@@ -100,38 +100,7 @@ function addMessage(content, sender) {
   chatMessages.appendChild(messageEl);
   chatMessages.scrollTop = chatMessages.scrollHeight;
 }
-// ============================================
-// SELECTOR DE TEMA (JEDI / SITH)
-// ============================================
 
-function setTheme(theme) {
-  document.body.classList.remove('jedi', 'sith');
-  document.body.classList.add(theme);
-  localStorage.setItem('inspector-theme', theme);
-  
-  // Cambiar ícono del badge según tema
-  const badge = document.getElementById('planBadge');
-  if (badge) {
-    if (theme === 'jedi') {
-      badge.style.background = 'linear-gradient(135deg, #00d4ff, #0a2b3e)';
-    } else if (theme === 'sith') {
-      badge.style.background = 'linear-gradient(135deg, #ff3333, #2d0a0a)';
-    }
-  }
-  
-  showToast(`Modo ${theme === 'jedi' ? 'Jedi ⚡' : 'Sith 🔥'} activado`, 'info');
-}
-
-// Cargar tema guardado al iniciar
-const savedTheme = localStorage.getItem('inspector-theme');
-if (savedTheme && (savedTheme === 'jedi' || savedTheme === 'sith')) {
-  setTheme(savedTheme);
-} else {
-  setTheme('jedi'); // Modo por defecto
-}
-
-// Exponer función global
-window.setTheme = setTheme;
 
 // ============================================
 // MENSAJE DE BIENVENIDA DINÁMICO POR PLAN
@@ -143,7 +112,7 @@ function loadWelcomeMessage() {
   
   const messages = {
     BASE: {
-      title: '¡Hola! Soy Baymax, tu asistente experto en **NOM-001-SEDE-2012**. ⚡',
+      title: '¡Hola! Soy Berymax, tu asistente experto en **NOM-001-SEDE-2012**. ⚡',
       features: [
         '✅ Validar puesta a tierra (Tabla 250-122)',
         '✅ Calcular calibre por amperaje (Tabla 310-16)',
@@ -676,4 +645,26 @@ document.addEventListener('DOMContentLoaded', async () => {
   updatePlanUI();
   
   if (userInput) userInput.focus();
+});
+// Agregar al final de app.js
+document.addEventListener('DOMContentLoaded', () => {
+  const savedTheme = localStorage.getItem('theme') || 'jedi';
+  document.documentElement.setAttribute('data-theme', savedTheme);
+  
+  // Crear botón en header (se inyecta automáticamente)
+  const headerContent = document.querySelector('.header-content');
+  if (headerContent && !document.getElementById('themeToggle')) {
+    const btn = document.createElement('button');
+    btn.id = 'themeToggle';
+    btn.className = 'theme-toggle';
+    btn.innerHTML = savedTheme === 'sith' ? '🔴 Sith' : '🔵 Jedi';
+    btn.onclick = () => {
+      const current = document.documentElement.getAttribute('data-theme');
+      const next = current === 'sith' ? 'jedi' : 'sith';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+      btn.innerHTML = next === 'sith' ? '🔴 Sith' : '🔵 Jedi';
+    };
+    headerContent.appendChild(btn);
+  }
 });
