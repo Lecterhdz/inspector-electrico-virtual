@@ -121,7 +121,7 @@ function loadWelcomeMessage() {
       footer: '⚡ **Plan Base** - Actualiza a Prime para motores, HVAC y soldadoras.\n\n💡 *Ejemplo: "Mi puesta a tierra es 10 AWG con interruptor de 40A, ¿está bien?"*'
     },
     PRIME: {
-      title: '¡Hola! Soy Baymax, tu asistente experto en **NOM-001-SEDE-2012**. ⚡',
+      title: '¡Hola! Soy Berymax, tu asistente experto en **NOM-001-SEDE-2012**. ⚡',
       features: [
         '✅ Validar puesta a tierra (Tabla 250-122)',
         '✅ Calcular calibre por amperaje (Tabla 310-16)',
@@ -132,7 +132,7 @@ function loadWelcomeMessage() {
       footer: '⭐ **Plan Prime** - Funcionalidades completas para profesionales.\n\n💡 *Ejemplo: "motor 75 HP 440V trifásico"*'
     },
     APEX: {
-      title: '¡Hola! Soy Baymax, tu asistente experto en **NOM-001-SEDE-2012**. ⚡',
+      title: '¡Hola! Soy Berymax, tu asistente experto en **NOM-001-SEDE-2012**. ⚡',
       features: [
         '✅ Validar puesta a tierra (Tabla 250-122)',
         '✅ Calcular calibre por amperaje (Tabla 310-16)',
