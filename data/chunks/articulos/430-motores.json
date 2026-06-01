@@ -1,0 +1,261 @@
+{
+  "meta": {
+    "version": "1.0.0",
+    "ultima_actualizacion": "2025-06-01T00:00:00.000Z",
+    "norma": "NOM-001-SEDE-2012"
+  },
+  "id": "nom-001-430",
+  "tipo": "articulo",
+  "numero": "430",
+  "titulo": "Motores, circuitos de motores y controladores",
+  "texto": "Este Artículo trata sobre los motores, los conductores de los alimentadores y circuitos derivados de los motores y de su protección, sobre la protección contra sobrecargas de los motores, sobre los circuitos de control de los motores, de los controladores de los motores y de los centros de control de motores.",
+  
+  "secciones": [
+    {
+      "subseccion": "A",
+      "titulo": "Generalidades",
+      "contenido": "Aplicable a motores, conductores de alimentadores y circuitos derivados, protección contra sobrecargas, circuitos de control, controladores y centros de control de motores.",
+      "subsecciones": [
+        {
+          "subseccion": "430-1",
+          "titulo": "Alcance",
+          "contenido": "Este Artículo trata sobre los motores, los conductores de los alimentadores y circuitos derivados de los motores y de su protección, sobre la protección contra sobrecargas de los motores, sobre los circuitos de control de los motores, de los controladores de los motores y de los centros de control de motores.",
+          "notas": ["Los requisitos de instalación de los centros de control de motores se tratan en 110-26(e).", "Los equipos de refrigeración y de aire acondicionado se tratan en el Artículo 440."]
+        },
+        {
+          "subseccion": "430-2",
+          "titulo": "Definiciones",
+          "contenido": "Define: Accionamiento de velocidad ajustable, Circuito de control del motor, Controlador, Ensambles de válvulas con activador de motor, Equipo seccionador del sistema, Sistema de accionamiento de velocidad ajustable."
+        },
+        {
+          "subseccion": "430-6",
+          "titulo": "Determinación de la ampacidad y del valor nominal de los motores",
+          "contenido": "El tamaño de los conductores se debe seleccionar de las Tablas de ampacidad de 310-15(b) o calcular según 310-15(c). Para aplicaciones generales usar Tablas 430-247, 430-248, 430-249, 430-250. Para protección independiente contra sobrecargas basarse en valores de placa del motor (430-6(a)(2))."
+        },
+        {
+          "subseccion": "430-7",
+          "titulo": "Marcado en los motores",
+          "contenido": "Debe incluir: nombre del fabricante, tensión y corriente nominal, frecuencia, fases, velocidad, aumento térmico o clase de aislamiento, régimen de tiempo, caballos de fuerza, letra de código, letra de diseño."
+        },
+        {
+          "subseccion": "430-8",
+          "titulo": "Marcado en los controladores",
+          "contenido": "Debe incluir: nombre del fabricante, tensión, valor nominal de corriente o caballos de fuerza, corriente nominal de cortocircuito."
+        }
+      ]
+    },
+    {
+      "subseccion": "B",
+      "titulo": "Conductores para circuitos de motores",
+      "subsecciones": [
+        {
+          "subseccion": "430-22",
+          "titulo": "Un solo motor",
+          "contenido": "Los conductores que alimenten un solo motor usado en aplicación de servicio continuo, deben tener ampacidad no menor al 125% del valor nominal de corriente de plena carga del motor.",
+          "formula": "I_conductor = I_motor × 1.25",
+          "ejemplo": "Motor 50 HP, 440V → I_placa = 65A → Conductor: 65A × 1.25 = 81.25A → Calibre 4 AWG (85A)"
+        },
+        {
+          "subseccion": "430-24",
+          "titulo": "Varios motores o motores y otras cargas",
+          "contenido": "Los conductores que alimentan varios motores deben tener ampacidad no menor a: (1) 125% de la corriente del motor más grande + (2) suma de corrientes de los otros motores + (3) 100% de cargas no continuas + (4) 125% de cargas continuas.",
+          "formula": "I_total = (I_mayor × 1.25) + Σ(I_otros) + I_no_continua + (I_continua × 1.25)"
+        }
+      ]
+    },
+    {
+      "subseccion": "C",
+      "titulo": "Protección contra sobrecarga de los motores y de sus circuitos derivados",
+      "subsecciones": [
+        {
+          "subseccion": "430-32",
+          "titulo": "Motores de servicio continuo",
+          "contenido": "Motores de más de 1 HP deben protegerse por dispositivo separado de sobrecarga (125% para factor servicio 1.15 o más, 115% para otros), o protector térmico integrado.",
+          "valores": [
+            "Motores con factor de servicio 1.15+ → 125%",
+            "Motores con aumento de temperatura ≤40°C → 125%",
+            "Todos los demás motores → 115%"
+          ]
+        },
+        {
+          "subseccion": "430-52",
+          "titulo": "Protección contra cortocircuito y fallas a tierra",
+          "contenido": "El dispositivo de protección del circuito derivado debe soportar la corriente de arranque del motor. Los límites máximos son: Fusible sin retardo → 300%, Fusible de dos elementos → 175%, Interruptor automático de tiempo inverso → 250%.",
+          "valores": [
+            "Fusible sin retardo de tiempo: 300%",
+            "Fusible de dos elementos (retardo): 175%",
+            "Interruptor automático de tiempo inverso: 250%",
+            "Interruptor automático de disparo instantáneo: 800%",
+            "Excepción: puede aumentar hasta 400% para fusibles sin retardo si es necesario para arranque"
+          ]
+        },
+        {
+          "subseccion": "430-32(c)",
+          "titulo": "Selección del dispositivo de protección contra sobrecarga",
+          "contenido": "Si el valor no es suficiente para arrancar, se permite aumentar hasta: 140% para motores con factor de servicio 1.15 o aumento ≤40°C, o 130% para otros motores."
+        }
+      ]
+    },
+    {
+      "subseccion": "D",
+      "titulo": "Protección de circuitos derivados para motores contra cortocircuito y fallas a tierra",
+      "subsecciones": [
+        {
+          "subseccion": "430-52",
+          "titulo": "Capacidad nominal o ajuste",
+          "contenido": "Tabla 430-52 especifica porcentajes máximos de la corriente a plena carga: Motores monofásicos y polifásicos: Fusible sin retardo 300%, Fusible de dos elementos 175%, Interruptor automático de tiempo inverso 250%, Interruptor de disparo instantáneo 800%.",
+          "valores": {
+            "fusible_sin_retardo": 300,
+            "fusible_dos_elementos": 175,
+            "interruptor_tiempo_inverso": 250,
+            "interruptor_disparo_instantaneo": 800
+          }
+        }
+      ]
+    },
+    {
+      "subseccion": "E",
+      "titulo": "Protección del alimentador de motores contra cortocircuito y fallas a tierra",
+      "subsecciones": [
+        {
+          "subseccion": "430-62",
+          "titulo": "Capacidad o ajuste",
+          "contenido": "El dispositivo de protección del alimentador debe tener valor nominal no mayor al mayor valor del dispositivo de protección del circuito derivado para cualquier motor, más la suma de corrientes de plena carga de los demás motores."
+        }
+      ]
+    },
+    {
+      "subseccion": "F",
+      "titulo": "Circuitos de control de motores",
+      "subsecciones": [
+        {
+          "subseccion": "430-72",
+          "titulo": "Protección contra sobrecorriente",
+          "contenido": "Los conductores del circuito de control derivado del lado de la carga deben estar protegidos según Tabla 430-72(b)."
+        }
+      ]
+    },
+    {
+      "subseccion": "G",
+      "titulo": "Controladores de motores",
+      "subsecciones": [
+        {
+          "subseccion": "430-81",
+          "titulo": "Generalidades",
+          "contenido": "Para motores estacionarios de 93W (1/8 HP) o menos, se permite que los medios de desconexión del circuito derivado sirvan como controlador."
+        },
+        {
+          "subseccion": "430-83",
+          "titulo": "Capacidades nominales",
+          "contenido": "Los controladores deben tener capacidad nominal a la tensión de suministro no menor a la potencia nominal del motor."
+        }
+      ]
+    },
+    {
+      "subseccion": "I",
+      "titulo": "Medios de desconexión",
+      "subsecciones": [
+        {
+          "subseccion": "430-102",
+          "titulo": "Ubicación",
+          "contenido": "Se debe proporcionar un medio de desconexión individual para cada controlador, ubicado al alcance de la vista desde el controlador."
+        },
+        {
+          "subseccion": "430-109",
+          "titulo": "Tipos de medios de desconexión",
+          "contenido": "Debe ser interruptor de circuito de motor valorado en HP, interruptor automático de caja moldeada, o interruptor de caja moldeada."
+        },
+        {
+          "subseccion": "430-110",
+          "titulo": "Capacidad nominal de corriente",
+          "contenido": "El medio de desconexión debe tener valor nominal de corriente no menor al 115% del valor nominal de corriente de plena carga del motor."
+        }
+      ]
+    },
+    {
+      "subseccion": "K",
+      "titulo": "Circuitos de motores de más de 600 volts nominales",
+      "subsecciones": [
+        {
+          "subseccion": "430-225",
+          "titulo": "Protección contra sobrecorriente",
+          "contenido": "Todos los circuitos de motor deben incluir protección coordinada para interrumpir automáticamente corrientes de falla y sobrecarga."
+        }
+      ]
+    }
+  ],
+  
+  "tablas": [
+    {
+      "id": "430-250",
+      "nombre": "Corriente a plena carga de motores trifásicos de corriente alterna",
+      "descripcion": "Valores típicos para motores con características normales de par",
+      "valores_trifasico_460V": [
+        {"hp": "0.5", "corriente": "1.1"},
+        {"hp": "1", "corriente": "2.1"},
+        {"hp": "2", "corriente": "3.4"},
+        {"hp": "3", "corriente": "4.8"},
+        {"hp": "5", "corriente": "7.6"},
+        {"hp": "7.5", "corriente": "11"},
+        {"hp": "10", "corriente": "14"},
+        {"hp": "15", "corriente": "21"},
+        {"hp": "20", "corriente": "27"},
+        {"hp": "25", "corriente": "34"},
+        {"hp": "30", "corriente": "40"},
+        {"hp": "40", "corriente": "52"},
+        {"hp": "50", "corriente": "65"},
+        {"hp": "60", "corriente": "77"},
+        {"hp": "75", "corriente": "96"},
+        {"hp": "100", "corriente": "124"},
+        {"hp": "125", "corriente": "156"},
+        {"hp": "150", "corriente": "180"},
+        {"hp": "200", "corriente": "240"}
+      ]
+    },
+    {
+      "id": "430-52",
+      "nombre": "Ajuste máximo de dispositivos de protección contra cortocircuito y falla a tierra",
+      "valores": {
+        "motores_monofasicos": {"fusible_sin_retardo": "300%", "fusible_dos_elementos": "175%", "interruptor_tiempo_inverso": "250%", "interruptor_disparo_instantaneo": "800%"},
+        "motores_polifasicos": {"fusible_sin_retardo": "300%", "fusible_dos_elementos": "175%", "interruptor_tiempo_inverso": "250%", "interruptor_disparo_instantaneo": "800%"},
+        "rotor_devanado": {"fusible_sin_retardo": "150%", "fusible_dos_elementos": "150%", "interruptor_tiempo_inverso": "150%", "interruptor_disparo_instantaneo": "800%"},
+        "corriente_continua": {"fusible_sin_retardo": "150%", "fusible_dos_elementos": "150%", "interruptor_tiempo_inverso": "150%", "interruptor_disparo_instantaneo": "250%"}
+      }
+    }
+  ],
+  
+  "tags": [
+    "motor", "motores", "430", "corriente", "placa",
+    "proteccion termica", "proteccion magnetica", "sobrecarga",
+    "125%", "250%", "conductores", "cortocircuito",
+    "arranque", "trifasico", "monofasico", "hp",
+    "controlador", "desconexion", "alimentador",
+    "circuito derivado", "rotor bloqueado", "letra de codigo"
+  ],
+  
+  "nivel_prioridad": "CRITICA",
+  
+  "casos_uso": [
+    "dimensionamiento de conductores para motor",
+    "seleccion de protecciones termicas (125%)",
+    "seleccion de protecciones magneticas (250%)",
+    "calculo de corriente a placa por HP",
+    "diseño de tablero de motores",
+    "seleccion de controladores",
+    "ubicacion de medios de desconexion",
+    "instalacion de varios motores en un circuito"
+  ],
+  
+  "formulas_clave": [
+    "I_conductor = I_motor × 1.25 (430-22)",
+    "I_termica = I_motor × 1.15 a 1.25 (430-32)",
+    "I_magnetica_max = I_motor × 2.5 (430-52)",
+    "I_alimentador = (I_mayor × 1.25) + Σ(I_otros) (430-24)"
+  ],
+  
+  "ejemplo": "Motor 75 HP, 440V, trifásico: Ipc=96A (Tabla 430-250). Conductor: 96×1.25=120A → Calibre 2 AWG (130A). Protección térmica: 96×1.25=120A. Protección magnética: 96×2.5=240A.",
+  
+  "version": "2012",
+  "extracted_at": "2025-06-01T00:00:00.000Z",
+  "tokens_estimados": 8500
+}
