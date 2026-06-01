@@ -100,6 +100,38 @@ function addMessage(content, sender) {
   chatMessages.appendChild(messageEl);
   chatMessages.scrollTop = chatMessages.scrollHeight;
 }
+// ============================================
+// SELECTOR DE TEMA (JEDI / SITH)
+// ============================================
+
+function setTheme(theme) {
+  document.body.classList.remove('jedi', 'sith');
+  document.body.classList.add(theme);
+  localStorage.setItem('inspector-theme', theme);
+  
+  // Cambiar ícono del badge según tema
+  const badge = document.getElementById('planBadge');
+  if (badge) {
+    if (theme === 'jedi') {
+      badge.style.background = 'linear-gradient(135deg, #00d4ff, #0a2b3e)';
+    } else if (theme === 'sith') {
+      badge.style.background = 'linear-gradient(135deg, #ff3333, #2d0a0a)';
+    }
+  }
+  
+  showToast(`Modo ${theme === 'jedi' ? 'Jedi ⚡' : 'Sith 🔥'} activado`, 'info');
+}
+
+// Cargar tema guardado al iniciar
+const savedTheme = localStorage.getItem('inspector-theme');
+if (savedTheme && (savedTheme === 'jedi' || savedTheme === 'sith')) {
+  setTheme(savedTheme);
+} else {
+  setTheme('jedi'); // Modo por defecto
+}
+
+// Exponer función global
+window.setTheme = setTheme;
 
 // ============================================
 // MENSAJE DE BIENVENIDA DINÁMICO POR PLAN
