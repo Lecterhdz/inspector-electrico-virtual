@@ -932,3 +932,126 @@ body {
   gap: 0.4rem;
 }
 .theme-toggle:hover { background: rgba(255,255,255,0.1); }
+
+/* ============================================
+   FIX: Hints en Modo Sith (Oscuro)
+   ============================================ */
+
+/* Hints - Tema Jedi (Claro) - por defecto */
+.chat-hints {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+  padding: 0.25rem 0;
+}
+
+.hint {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  background: var(--bg-card);
+  padding: 0.25rem 0.625rem;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  border: 1px solid var(--border);
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.hint:hover {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+  box-shadow: var(--shadow-glow);
+  transform: translateY(-1px);
+}
+
+/* 🌑 Hints - Tema Sith (Oscuro) - override específico */
+[data-theme="sith"] .hint {
+  background: var(--bg-input);        /* Fondo más oscuro que bg-card */
+  color: var(--text-secondary);       /* Texto gris claro, no blanco puro */
+  border-color: var(--border);        /* Borde sutil */
+}
+
+[data-theme="sith"] .hint:hover {
+  background: var(--primary);         /* Rojo Sith al hover */
+  color: #fff;
+  border-color: var(--primary-dark);
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.4);  /* Glow rojo sutil */
+}
+
+/* Iconos dentro de hints (📏 ⚡ 🔄 📖) - mejor contraste en oscuro */
+[data-theme="sith"] .hint::first-letter,
+[data-theme="sith"] .hint span:first-child {
+  opacity: 1;
+  filter: brightness(1.1);
+}
+
+/* Input area en modo Sith - asegurar contraste */
+[data-theme="sith"] .chat-input-area {
+  border-top-color: var(--border);
+  background: var(--bg-secondary);
+}
+
+[data-theme="sith"] .chat-form {
+  background: var(--bg-input);
+  border-radius: var(--radius-full);
+  padding: 0.25rem;
+}
+/* ============================================
+   SITH THEME: Mejoras de Inmersión (Opcional)
+   ============================================ */
+[data-theme="sith"] {
+  /* Efecto de "resplandor rojo" sutil en elementos activos */
+  --sith-glow: 0 0 20px rgba(239, 68, 68, 0.15);
+}
+
+[data-theme="sith"] .message.user .message-content {
+  background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+  box-shadow: var(--sith-glow);
+}
+
+[data-theme="sith"] .btn-send {
+  background: var(--primary);
+  box-shadow: 0 0 8px rgba(239, 68, 68, 0.3);
+}
+[data-theme="sith"] .btn-send:hover {
+  background: var(--primary-dark);
+  box-shadow: 0 0 16px rgba(239, 68, 68, 0.6);
+  transform: scale(1.05);
+}
+
+[data-theme="sith"] .plan-card-mini.featured {
+  border-color: var(--primary);
+  background: linear-gradient(135deg, rgba(239,68,68,0.08), var(--bg-card));
+  box-shadow: inset 0 0 20px rgba(239, 68, 68, 0.05);
+}
+
+[data-theme="sith"] .plan-card-mini.featured::before {
+  text-shadow: 0 0 8px rgba(239, 68, 68, 0.8);
+}
+
+/* Animación sutil de "pulso" en el badge de plan activo */
+[data-theme="sith"] .badge {
+  animation: sithPulse 3s ease-in-out infinite;
+}
+@keyframes sithPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+  50% { box-shadow: 0 0 0 6px rgba(239, 68, 68, 0); }
+}
+
+/* Scrollbar personalizado para modo Sith */
+[data-theme="sith"] ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+[data-theme="sith"] ::-webkit-scrollbar-track {
+  background: var(--bg-input);
+}
+[data-theme="sith"] ::-webkit-scrollbar-thumb {
+  background: var(--primary-dark);
+  border-radius: 4px;
+}
+[data-theme="sith"] ::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+  box-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
+}
