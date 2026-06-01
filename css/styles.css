@@ -1072,3 +1072,233 @@ body {
   background: var(--primary);
   box-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
 }
+/* ============================================
+   HEADER ACTIONS + BOTÓN PLANES
+   ============================================ */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0.4rem;
+  border-radius: var(--radius-full);
+  transition: background 0.2s;
+  color: var(--text);
+}
+.icon-btn:hover { background: var(--bg-card); }
+
+.btn-plans-header {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: var(--radius-full);
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.btn-plans-header:hover {
+  background: var(--primary-dark);
+  box-shadow: 0 0 12px var(--primary-glow);
+}
+
+/* ============================================
+   VISTA DE PLANES
+   ============================================ */
+.plans-view {
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  z-index: 150;
+  padding: 1rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  animation: slideIn 0.3s ease;
+}
+
+.plans-view.hidden { display: none; }
+
+@keyframes slideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+.plans-view-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.btn-back {
+  background: none;
+  border: none;
+  color: var(--primary);
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: var(--radius);
+  transition: background 0.2s;
+}
+.btn-back:hover { background: var(--bg-card); }
+
+.plans-view h2 { margin: 0; font-size: 1.3rem; color: var(--text); }
+
+/* Grid de planes */
+.plans-grid {
+  display: grid;
+  gap: 1.25rem;
+  max-width: 600px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.plan-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  position: relative;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.plan-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+.plan-card.featured {
+  border-color: var(--primary);
+  background: linear-gradient(135deg, var(--bg-card), var(--bg-secondary));
+}
+
+.plan-badge {
+  position: absolute;
+  top: -10px;
+  right: 15px;
+  background: var(--primary);
+  color: white;
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-full);
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.plan-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 0.75rem;
+}
+.plan-name { font-weight: 700; font-size: 1.1rem; color: var(--text); }
+.plan-price { font-weight: 600; color: var(--primary); }
+
+.plan-features {
+  list-style: none;
+  margin: 0 0 1rem;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+.plan-features li {
+  padding: 0.3rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-plan {
+  width: 100%;
+  padding: 0.6rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: var(--text);
+}
+.btn-plan.btn-primary {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: white;
+}
+.btn-plan:hover {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: white;
+}
+
+/* Caja de licencia */
+.license-box {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  margin: 2rem auto 0;
+  max-width: 500px;
+  text-align: center;
+}
+.license-box h3 { margin: 0 0 0.5rem; color: var(--text); }
+.license-box p { color: var(--text-muted); margin: 0 0 1rem; font-size: 0.9rem; line-height: 1.4; }
+
+.license-input {
+  width: 100%;
+  padding: 0.8rem;
+  margin: 0 0 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-input);
+  color: var(--text);
+  font-family: monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.btn-license-activate {
+  width: 100%;
+  padding: 0.8rem;
+  background: var(--primary);
+  border: none;
+  border-radius: var(--radius);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-license-activate:hover {
+  background: var(--primary-dark);
+  box-shadow: 0 0 12px var(--primary-glow);
+}
+
+.user-info {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  text-align: left;
+  font-size: 0.9rem;
+  color: var(--text);
+}
+.user-info.hidden { display: none; }
+
+/* ============================================
+   AJUSTES PARA CHAT SIN PLANS
+   ============================================ */
+.main-container { grid-template-columns: 1fr !important; }
+.chat-area { height: calc(100vh - 140px) !important; }
+
+/* Responsive */
+@media (max-width: 600px) {
+  .plans-grid { gap: 1rem; }
+  .plan-card { padding: 1rem; }
+  .license-box { padding: 1.25rem; margin: 1.5rem auto 0; }
+}
