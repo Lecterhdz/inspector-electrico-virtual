@@ -1,11 +1,11 @@
 /**
  * @file js/app.js
- * @description Lógica del chat PWA + Supabase Auth + Licencias + Gating por plan
- * @version 4.0 - Mejorado: manejo de API, mensaje de bienvenida dinámico, fallback offline
+ * @description Lógica del chat PWA + Supabase Auth + Licencias + Router de Vistas + Temas Jedi/Sith
+ * @version 5.0 - UI Profesional + Sync UI multi-vista + Accesibilidad mejorada
  */
 
 // ============================================
-// CONFIGURACIÓN SUPABASE (REEMPLAZA CON TUS DATOS REALES)
+// CONFIGURACIÓN SUPABASE
 // ============================================
 const SUPABASE_URL = 'https://eeymrugligeojechkcma.supabase.co';
 const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVleW1ydWdsaWdlb2plY2hrY21hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg3OTMyODEsImV4cCI6MjA5NDM2OTI4MX0.wVmp2GZZa574pM0ghKJ4t99wyZLWjIcX8_cm3N_dlFk';
@@ -43,6 +43,8 @@ const btnSend = document.getElementById('btnSend');
 const toast = document.getElementById('toast');
 const authModal = document.getElementById('authModal');
 const planBadge = document.getElementById('planBadge');
+const plansView = document.getElementById('plansView');
+const chatArea = document.querySelector('.chat-area');
 
 // ============================================
 // FUNCIONES AUXILIARES
@@ -101,9 +103,8 @@ function addMessage(content, sender) {
   chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
-
 // ============================================
-// MENSAJE DE BIENVENIDA DINÁMICO POR PLAN
+// MENSAJE DE BIENVENIDA DINÁMICO
 // ============================================
 
 function loadWelcomeMessage() {
@@ -151,7 +152,7 @@ function loadWelcomeMessage() {
   
   let authMessage = '';
   if (!isLoggedIn) {
-    authMessage = `<p style="margin-top:0.75rem; padding:0.5rem; background:#f0f0f0; border-radius:0.5rem; font-size:0.8rem;">
+    authMessage = `<p style="margin-top:0.75rem; padding:0.5rem; background:var(--bg-card); border-radius:0.5rem; font-size:0.8rem;">
       🔐 <strong>Inicia sesión</strong> para guardar tu historial y acceder a todas las funciones.<br>
       👉 Haz clic en <strong>🎟️ Licencia</strong> para registrarte o ingresar.
     </p>`;
@@ -188,17 +189,13 @@ function loadWelcomeMessage() {
 // ============================================
 
 async function loadProfile(userId) {
-  const { data, error } = await supabase.from('profiles').select('plan, license_code, expires_at').eq('id', userId).single();
+  const { data, error } = await supabase.from('profiles').select('plan, license_code, expires_at, email').eq('id', userId).single();
   if (error || !data) return;
   
-  session.user = { id: userId };
+  session.user = { id: userId, email: data.email };
   session.plan = data.plan || 'BASE';
   session.license = data.license_code;
   session.expiresAt = data.expires_at;
-  
-  // Obtener email del usuario autenticado
-  const { data: { user } } = await supabase.auth.getUser();
-  if (user) session.user.email = user.email;
   
   // Verificar expiración de licencia
   if (data.expires_at && new Date(data.expires_at) < new Date()) {
@@ -206,9 +203,9 @@ async function loadProfile(userId) {
     showToast('⚠️ Licencia expirada. Plan revertido a BASE.', 'warning');
   }
   
-  updatePlanUI();
-  updateUserInfoModal();
-  loadWelcomeMessage(); // Recargar mensaje con nuevo plan
+  // ✅ Sync UI en TODAS las vistas
+  syncPlanUI();
+  loadWelcomeMessage();
 }
 
 // Manejar login/registro
@@ -230,16 +227,14 @@ window.handleAuth = async (type) => {
   showToast(type === 'signup' ? '✅ Registro exitoso. Ya puedes iniciar sesión.' : '✅ Sesión iniciada', 'success');
   
   if (type === 'signup') {
-    // Limpiar campos para login
     document.getElementById('authPass').value = '';
     return;
   }
   
-  // Recargar perfil tras auth exitoso
   const { data: { session: authSession } } = await supabase.auth.getSession();
   if (authSession?.user) {
     await loadProfile(authSession.user.id);
-    if (authModal) authModal.style.display = 'none';
+    if (authModal?.close) authModal.close();
   }
 };
 
@@ -254,7 +249,6 @@ window.redeemLicense = async () => {
   try {
     console.log('[License] Buscando:', code);
     
-    // 1. Buscar licencia
     const { data: lic, error: licErr } = await supabase
       .from('licenses')
       .select('*')
@@ -270,30 +264,21 @@ window.redeemLicense = async () => {
     if (!lic.is_active) throw new Error('Licencia ya usada o desactivada');
     if (new Date(lic.expires_at) < new Date()) throw new Error('Licencia expirada');
     
-    // 2. Actualizar perfil
     const { error: updateErr } = await supabase
       .from('profiles')
-      .update({ 
-        plan: lic.plan, 
-        license_code: lic.code, 
-        expires_at: lic.expires_at 
-      })
+      .update({ plan: lic.plan, license_code: lic.code, expires_at: lic.expires_at })
       .eq('id', session.user.id);
       
     if (updateErr) throw new Error('Error al activar: ' + updateErr.message);
     
-    // 3. Marcar como usada
     const { error: markErr } = await supabase
       .from('licenses')
-      .update({ is_active: false, used_by: session.user.id })  // ← Solo lo que sí existe
+      .update({ is_active: false, used_by: session.user.id })
       .eq('code', code);
       
     if (markErr) throw new Error('Error al marcar usada: ' + markErr.message);
     
-    // 4. Recargar sesión
     await loadProfile(session.user.id);
-    updatePlanUI();
-    updateUserInfoModal();
     showToast(`✅ Plan ${session.plan} activado por 30 días`, 'success');
     if (codeInput) codeInput.value = '';
     
@@ -303,35 +288,52 @@ window.redeemLicense = async () => {
   }
 };
 
-// Actualizar UI de planes
-function updatePlanUI() {
+// ============================================
+// SYNC UI: ACTUALIZAR TODAS LAS VISTAS
+// ============================================
+
+function syncPlanUI() {
+  // 1. Badge en header
   if (planBadge) {
     planBadge.textContent = session.plan;
     planBadge.className = `badge ${session.plan.toLowerCase()}`;
   }
   
-  document.querySelectorAll('.plan-card-mini').forEach(card => {
+  // 2. Cards en vista de planes
+  document.querySelectorAll('.plan-card').forEach(card => {
     card.classList.toggle('active', card.dataset.plan === session.plan);
-    if (card.dataset.plan === session.plan) {
-      const btn = card.querySelector('.btn-plan-mini');
-      if (btn) btn.textContent = '✓ Activo';
-    }
+    const btn = card.querySelector('.btn-plan');
+    if (btn) btn.textContent = card.dataset.plan === session.plan ? '✓ Activo' : 'Seleccionar';
   });
-}
-
-function updateUserInfoModal() {
-  const userInfo = document.getElementById('userInfo');
+  
+  // 3. Info de usuario en vista de planes
   const userEmail = document.getElementById('userEmail');
   const userPlan = document.getElementById('userPlan');
   const userExpiry = document.getElementById('userExpiry');
+  const userInfo = document.getElementById('userInfo');
   
-  if (userInfo && userEmail && userPlan && userExpiry && session.user) {
-    userInfo.style.display = 'block';
-    userEmail.textContent = session.user.email || 'Usuario';
+  if (session.user && userEmail && userPlan && userExpiry && userInfo) {
+    userEmail.textContent = session.user.email || 'N/A';
     userPlan.textContent = session.plan;
     userExpiry.textContent = session.expiresAt 
       ? new Date(session.expiresAt).toLocaleDateString('es-MX') 
-      : 'Sin expiración';
+      : 'N/A';
+    userInfo.classList.remove('hidden');
+  }
+  
+  // 4. Info de usuario en modal de auth
+  const userEmailM = document.getElementById('userEmailModal');
+  const userPlanM = document.getElementById('userPlanModal');
+  const userExpiryM = document.getElementById('userExpiryModal');
+  const userInfoM = document.getElementById('userInfoModal');
+  
+  if (session.user && userEmailM && userPlanM && userExpiryM && userInfoM) {
+    userEmailM.textContent = session.user.email || 'N/A';
+    userPlanM.textContent = session.plan;
+    userExpiryM.textContent = session.expiresAt 
+      ? new Date(session.expiresAt).toLocaleDateString('es-MX') 
+      : 'N/A';
+    userInfoM.style.display = 'block';
   }
 }
 
@@ -340,7 +342,6 @@ function updateUserInfoModal() {
 // ============================================
 
 async function processQuery(input) {
-  // Verificar si estamos offline
   if (!navigator.onLine) {
     session.modoOffline = true;
     return processQueryLocalFallback(input, session.plan);
@@ -348,7 +349,6 @@ async function processQuery(input) {
   
   session.modoOffline = false;
   
-  // Obtener token de auth
   const { data: { session: authSession } } = await supabase.auth.getSession();
   const token = authSession?.access_token || '';
   
@@ -360,29 +360,22 @@ async function processQuery(input) {
     usuario: session.user ? { id: session.user.id, email: session.user.email } : null
   };
   
-  // Intentar API remota primero
   try {
     const response = await fetch(API_URL, {
       method: 'POST',
-      headers: { 
-        'Content-Type': 'application/json',
-        'Authorization': token ? `Bearer ${token}` : ''
-      },
+      headers: { 'Content-Type': 'application/json', 'Authorization': token ? `Bearer ${token}` : '' },
       body: JSON.stringify({ input, session: sessionData }),
       signal: AbortSignal.timeout(10000)
     });
     
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    
     const data = await response.json();
     if (!data.success) throw new Error(data.error || 'Error en servidor');
-    
     return data.respuesta;
     
   } catch (error) {
     console.warn('[API Remote] Error:', error.message);
     
-    // Intentar API local
     try {
       const localResponse = await fetch(LOCAL_API_URL, {
         method: 'POST',
@@ -399,7 +392,6 @@ async function processQuery(input) {
       console.warn('[API Local] Error:', localError.message);
     }
     
-    // Fallback offline
     session.modoOffline = true;
     return processQueryLocalFallback(input, session.plan);
   }
@@ -410,14 +402,12 @@ async function processQueryLocalFallback(input, plan = 'BASE') {
   await new Promise(r => setTimeout(r, 300));
   const texto = input.toLowerCase();
   
-  // Validación de puesta a tierra
   const patMatch = texto.match(/(\d+)\s*awg/i);
   const interruptorMatch = texto.match(/(\d+)\s*a(?!\s*wg)/i);
   
   if (patMatch && interruptorMatch && /puesta a tierra|tierra/i.test(texto)) {
     const awg = parseInt(patMatch[1]);
     const interruptor = parseInt(interruptorMatch[1]);
-    
     let minimo = '10';
     if (interruptor <= 20) minimo = '14';
     else if (interruptor <= 60) minimo = '10';
@@ -435,7 +425,6 @@ async function processQueryLocalFallback(input, plan = 'BASE') {
     }
   }
   
-  // Calibre por corriente
   const ampMatch = texto.match(/(\d+)\s*a/i);
   if (ampMatch && /calibre|necesito|conductor/i.test(texto)) {
     const amp = parseInt(ampMatch[1]);
@@ -452,7 +441,6 @@ async function processQueryLocalFallback(input, plan = 'BASE') {
     return { respuesta_directa: `📐 Para ${amp}A: calibre sugerido ${awg} AWG cobre (THW, 30°C).\n\n📚 Tabla 310-16 NOM-001-SEDE-2012 (modo local)` };
   }
   
-  // Motores (solo Prime/Apex)
   if (texto.includes('motor') && plan !== 'BASE') {
     const hpMatch = texto.match(/(\d+)\s*hp/i);
     if (hpMatch) {
@@ -481,10 +469,9 @@ chatForm.addEventListener('submit', async (e) => {
   const input = userInput.value.trim();
   if (!input || isLoading) return;
   
-  // Verificar autenticación
   if (!session.user) {
     showToast('Inicia sesión para usar el inspector', 'warning');
-    if (authModal) authModal.style.display = 'flex';
+    if (authModal?.showModal) authModal.showModal();
     return;
   }
   
@@ -529,10 +516,9 @@ window.fillInput = (text) => {
 };
 
 window.selectPlan = (plan) => {
-  // Demo preview - en producción el plan viene de licencia
   if (!session.user) {
     showToast('Inicia sesión para cambiar de plan', 'warning');
-    if (authModal) authModal.style.display = 'flex';
+    if (authModal?.showModal) authModal.showModal();
     return;
   }
   showToast(`ℹ️ Plan ${plan.toUpperCase()}. Adquiere una licencia para activar.`, 'info');
@@ -564,50 +550,69 @@ window.exportHistory = () => {
 
 window.logout = async () => {
   await supabase.auth.signOut();
-  session = { 
-    user: null, 
-    plan: 'BASE', 
-    license: null, 
-    expiresAt: null, 
-    historial: [], 
-    parametros: {},
-    modoOffline: false
-  };
+  session = { user: null, plan: 'BASE', license: null, expiresAt: null, historial: [], parametros: {}, modoOffline: false };
   localStorage.removeItem('inspector-session');
   
-  if (authModal) authModal.style.display = 'flex';
-  updatePlanUI();
+  if (authModal?.showModal) authModal.showModal();
+  syncPlanUI();
   loadWelcomeMessage();
   
   const userInfo = document.getElementById('userInfo');
-  if (userInfo) userInfo.style.display = 'none';
+  if (userInfo) userInfo.classList.add('hidden');
   
   showToast('Sesión cerrada', 'info');
 };
 
-window.openAuthModal = () => {
-  if (authModal) authModal.style.display = 'flex';
-};
-
-window.closeAuthModal = () => {
-  if (authModal) authModal.style.display = 'none';
-};
-
 // ============================================
-// INICIALIZACIÓN
+// INICIALIZACIÓN + ROUTER + TEMA
 // ============================================
 
 document.addEventListener('DOMContentLoaded', async () => {
-  // Configurar modal
-  if (authModal) {
-    authModal.addEventListener('click', (e) => {
-      if (e.target === authModal) {
-        authModal.style.display = 'none';
+  // ========== TEMA JEDI/SITH ==========
+  const savedTheme = localStorage.getItem('theme') || 'jedi';
+  document.documentElement.setAttribute('data-theme', savedTheme);
+  
+  const themeToggle = document.getElementById('themeToggle');
+  if (themeToggle) {
+    themeToggle.textContent = savedTheme === 'sith' ? '🌑' : '☀️';
+    themeToggle.onclick = () => {
+      const current = document.documentElement.getAttribute('data-theme');
+      const next = current === 'sith' ? 'jedi' : 'sith';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+      themeToggle.textContent = next === 'sith' ? '🌑' : '☀️';
+    };
+  }
+  
+  // ========== ROUTER DE VISTAS ==========
+  const plansBtn = document.getElementById('plansBtn');
+  const closePlans = document.getElementById('closePlans');
+  
+  if (plansBtn && closePlans && plansView && chatArea) {
+    plansBtn.onclick = () => {
+      plansView.classList.remove('hidden');
+      chatArea.style.display = 'none';
+      document.body.style.overflow = 'hidden';
+    };
+    
+    closePlans.onclick = () => {
+      plansView.classList.add('hidden');
+      chatArea.style.display = 'flex';
+      document.body.style.overflow = '';
+      if (userInput) userInput.focus();
+    };
+  }
+  
+  // ========== MODAL ACCESSIBILITY ==========
+  if (authModal?.addEventListener) {
+    authModal.addEventListener('close', () => {
+      if (userInput && !plansView?.classList.contains('hidden')) {
+        userInput.focus();
       }
     });
   }
   
-  // Detectar estado de conexión
+  // ========== CONEXIÓN ONLINE/OFFLINE ==========
   window.addEventListener('online', () => {
     session.modoOffline = false;
     showToast('🟢 Conexión recuperada. Validación oficial disponible.', 'success');
@@ -622,17 +627,16 @@ document.addEventListener('DOMContentLoaded', async () => {
   
   session.modoOffline = !navigator.onLine;
   
-  // Cargar sesión auth de Supabase
+  // ========== CARGAR SESIÓN ==========
   const { data: { session: authSession } } = await supabase.auth.getSession();
   
   if (authSession?.user) {
     await loadProfile(authSession.user.id);
-    if (authModal) authModal.style.display = 'none';
   } else {
     loadWelcomeMessage();
   }
   
-  // Cargar historial local
+  // ========== CARGAR HISTORIAL LOCAL ==========
   const saved = localStorage.getItem('inspector-session');
   if (saved) {
     try { 
@@ -642,29 +646,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     } catch {}
   }
   
-  updatePlanUI();
+  // ========== SYNC INICIAL ==========
+  syncPlanUI();
   
   if (userInput) userInput.focus();
-});
-// Agregar al final de app.js
-document.addEventListener('DOMContentLoaded', () => {
-  const savedTheme = localStorage.getItem('theme') || 'jedi';
-  document.documentElement.setAttribute('data-theme', savedTheme);
-  
-  // Crear botón en header (se inyecta automáticamente)
-  const headerContent = document.querySelector('.header-content');
-  if (headerContent && !document.getElementById('themeToggle')) {
-    const btn = document.createElement('button');
-    btn.id = 'themeToggle';
-    btn.className = 'theme-toggle';
-    btn.innerHTML = savedTheme === 'sith' ? '🔴 Sith' : '🔵 Jedi';
-    btn.onclick = () => {
-      const current = document.documentElement.getAttribute('data-theme');
-      const next = current === 'sith' ? 'jedi' : 'sith';
-      document.documentElement.setAttribute('data-theme', next);
-      localStorage.setItem('theme', next);
-      btn.innerHTML = next === 'sith' ? '🔴 Sith' : '🔵 Jedi';
-    };
-    headerContent.appendChild(btn);
-  }
 });
