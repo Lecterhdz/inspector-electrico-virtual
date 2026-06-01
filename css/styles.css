@@ -820,90 +820,115 @@ body {
 .mt-1 { margin-top: 0.5rem; }
 .mb-1 { margin-bottom: 0.5rem; }
 /* ============================================
-   MODO CLARO (JEDI - AZUL NEÓN)
+   TEMAS: JEDI (Claro) / SITH (Oscuro)
    ============================================ */
-body.jedi {
-  --primary: #0a2b3e;
-  --primary-dark: #051520;
-  --primary-light: #1e5a7d;
-  --accent: #00d4ff;
-  --accent-glow: 0 0 10px rgba(0, 212, 255, 0.5);
-  --bg-gradient: linear-gradient(135deg, #0a0f1a 0%, #0a2b3e 100%);
-  --card-bg: rgba(10, 43, 62, 0.85);
-  --text: #e0e0e0;
-  --text-light: #ffffff;
+:root {
+  /* JEDI THEME (Default - Claro) */
+  --bg-primary: #f8fafc;
+  --bg-secondary: #ffffff;
+  --bg-card: #f1f5f9;
+  --bg-input: #ffffff;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+  --primary: #0ea5e9;       /* Neon Azul Jedi */
+  --primary-dark: #0284c7;
+  --primary-glow: rgba(14, 165, 233, 0.25);
+  --accent: #38bdf8;
+  --border: #e2e8f0;
+  --shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+  --shadow-glow: 0 0 12px rgba(14, 165, 233, 0.3);
+  --radius: 0.75rem;
+  --radius-full: 9999px;
 }
 
-body.jedi .chat-area {
-  border: 1px solid var(--accent);
-  box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+[data-theme="sith"] {
+  /* SITH THEME (Oscuro) */
+  --bg-primary: #0a0a0a;
+  --bg-secondary: #111111;
+  --bg-card: #1a1a1a;
+  --bg-input: #141414;
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-muted: #64748b;
+  --primary: #ef4444;       /* Rojo Sith */
+  --primary-dark: #b91c1c;
+  --primary-glow: rgba(239, 68, 68, 0.2);
+  --accent: #f87171;
+  --border: #27272a;
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --shadow-glow: 0 0 14px rgba(239, 68, 68, 0.35);
 }
 
-body.jedi .btn-send {
-  background: var(--accent);
-  box-shadow: var(--accent-glow);
+/* Aplicar variables a elementos existentes */
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background 0.3s, color 0.3s;
 }
 
-/* ============================================
-   MODO OSCURO (SITH - ROJO NEÓN)
-   ============================================ */
-body.sith {
-  --primary: #2d0a0a;
-  --primary-dark: #1a0505;
-  --primary-light: #5a1e1e;
-  --accent: #ff3333;
-  --accent-glow: 0 0 10px rgba(255, 51, 51, 0.6);
-  --bg-gradient: linear-gradient(135deg, #0a0a0a 0%, #1a0505 100%);
-  --card-bg: rgba(26, 5, 5, 0.85);
-  --text: #e0e0e0;
-  --text-light: #ff9999;
+.header {
+  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+  box-shadow: var(--shadow-glow);
 }
 
-body.sith .chat-area {
-  border: 1px solid var(--accent);
-  box-shadow: 0 0 20px rgba(255, 51, 51, 0.2);
+.badge {
+  background: var(--primary-glow);
+  border: 1px solid var(--primary);
+  color: var(--text-primary);
 }
 
-body.sith .btn-send {
-  background: var(--accent);
-  box-shadow: var(--accent-glow);
+.chat-area, .plans-sidebar-compact, .modal-content, .plan-card-mini {
+  background: var(--bg-secondary);
+  border-color: var(--border);
+  box-shadow: var(--shadow);
+  color: var(--text-primary);
 }
 
-/* ============================================
-   SELECTOR DE TEMA (JEDI / SITH)
-   ============================================ */
-.theme-selector {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  display: flex;
-  gap: 10px;
-  z-index: 1000;
-  background: rgba(0,0,0,0.7);
-  padding: 8px 12px;
-  border-radius: 30px;
-  backdrop-filter: blur(8px);
+.message-content {
+  background: var(--bg-card);
+  color: var(--text-primary);
 }
 
-.theme-btn {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: none;
+.message.user .message-content {
+  background: var(--primary);
+  color: #fff;
+}
+
+.chat-input {
+  background: var(--bg-input);
+  border-color: var(--border);
+  color: var(--text-primary);
+}
+
+.chat-input::placeholder { color: var(--text-muted); }
+.chat-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-glow);
+}
+
+.btn-send, .btn-plan-mini, .btn-license, .btn-modal, .btn-license-activate {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+  transition: all 0.2s;
+}
+.btn-send:hover, .btn-plan-mini:hover, .btn-license:hover, .btn-modal:hover, .btn-license-activate:hover {
+  background: var(--primary-dark);
+  box-shadow: var(--shadow-glow);
+}
+
+/* Toggle de Tema en Header */
+.theme-toggle {
+  background: none;
+  border: 1px solid rgba(255,255,255,0.3);
+  color: white;
+  padding: 0.3rem 0.6rem;
+  border-radius: var(--radius-full);
   cursor: pointer;
-  transition: all 0.3s ease;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
 }
-
-.theme-btn.jedi {
-  background: #00d4ff;
-  box-shadow: 0 0 10px #00d4ff;
-}
-
-.theme-btn.sith {
-  background: #ff3333;
-  box-shadow: 0 0 10px #ff3333;
-}
-
-.theme-btn:hover {
-  transform: scale(1.1);
-}
+.theme-toggle:hover { background: rgba(255,255,255,0.1); }
