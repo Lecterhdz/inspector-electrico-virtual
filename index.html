@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-theme="jedi">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
@@ -12,7 +12,7 @@
   
   <!-- PWA Manifest -->
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#1e5a7d">
+  <meta name="theme-color" content="#0ea5e9">
   
   <!-- Meta tags PWA -->
   <meta name="mobile-web-app-capable" content="yes">
@@ -21,8 +21,8 @@
   <meta name="apple-mobile-web-app-title" content="Inspector EV">
   
   <!-- Iconos (con fallback a emoji) -->
-  <link rel="icon" type="image/png" sizes="192x192" href="https://via.placeholder.com/192/1e5a7d/ffffff?text=⚡">
-  <link rel="apple-touch-icon" href="https://via.placeholder.com/192/1e5a7d/ffffff?text=⚡">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://via.placeholder.com/192/0ea5e9/ffffff?text=⚡">
+  <link rel="apple-touch-icon" href="https://via.placeholder.com/192/0ea5e9/ffffff?text=⚡">
   
   <!-- Estilos -->
   <link rel="stylesheet" href="css/styles.css">
@@ -33,7 +33,7 @@
 </head>
 <body>
 
-  <!-- Header -->
+  <!-- Header Profesional -->
   <header class="header">
     <div class="header-content">
       <div class="logo">
@@ -43,14 +43,16 @@
           <small>NOM-001-SEDE-2012</small>
         </div>
       </div>
-      <span class="badge" id="planBadge">BASE</span>
+      <div class="header-actions">
+        <span class="badge" id="planBadge">BASE</span>
+        <button id="themeToggle" class="icon-btn" title="Cambiar tema">🌗</button>
+        <button id="plansBtn" class="btn-plans-header" title="Ver planes y licencias">📋 Planes</button>
+      </div>
     </div>
   </header>
 
-  <!-- Contenedor Principal -->
+  <!-- Contenedor Principal: Chat -->
   <main class="main-container">
-    
-    <!-- Área de Chat -->
     <section class="chat-area">
       <div class="chat-messages" id="chatMessages">
         <!-- Mensaje de bienvenida se carga desde JS -->
@@ -79,65 +81,77 @@
         </div>
       </div>
     </section>
-    
-    <!-- Plans Sidebar Compacto -->
-    <aside class="plans-sidebar-compact" id="plansCompact">
-      <div class="plans-scroll">
-        
-        <!-- Plan Base -->
-        <div class="plan-card-mini" data-plan="base">
-          <div class="plan-mini-header">
-            <span class="plan-mini-name">Base</span>
-            <span class="plan-mini-price">$1,499</span>
-          </div>
-          <div class="plan-mini-features">
-            <span>✅ Puesta a tierra</span>
-            <span>✅ Calibre por A</span>
-            <span>✅ Tablas básicas</span>
-          </div>
-          <button class="btn-plan-mini" onclick="selectPlan('base')">Seleccionar</button>
-        </div>
-        
-        <!-- Plan Prime (destacado) -->
-        <div class="plan-card-mini featured" data-plan="prime">
-          <div class="plan-mini-header">
-            <span class="plan-mini-name">Prime ⭐</span>
-            <span class="plan-mini-price">$2,499</span>
-          </div>
-          <div class="plan-mini-features">
-            <span>✅ Todo Base</span>
-            <span>✅ Motores (430)</span>
-            <span>✅ HVAC (440)</span>
-            <span>✅ Soldadoras (630)</span>
-          </div>
-          <button class="btn-plan-mini btn-primary" onclick="selectPlan('prime')">Seleccionar</button>
-        </div>
-        
-        <!-- Plan Apex -->
-        <div class="plan-card-mini" data-plan="apex">
-          <div class="plan-mini-header">
-            <span class="plan-mini-name">Apex</span>
-            <span class="plan-mini-price">$3,999</span>
-          </div>
-          <div class="plan-mini-features">
-            <span>✅ Todo Prime</span>
-            <span>✅ Reportes PDF</span>
-            <span>✅ Soporte prioritario</span>
-          </div>
-          <button class="btn-plan-mini" onclick="selectPlan('apex')">Seleccionar</button>
-        </div>
-        
-        <!-- Botón de Licencia -->
-        <div class="license-btn-wrapper">
-          <button class="btn-license" onclick="openAuthModal()">
-            🎟️ Licencia
-          </button>
-        </div>
-        
-      </div>
-    </aside>
-    
   </main>
+
+  <!-- Vista: Planes & Licencias (Oculta por defecto) -->
+  <section id="plansView" class="plans-view hidden">
+    <div class="plans-view-header">
+      <button id="closePlans" class="btn-back">← Volver al chat</button>
+      <h2>Planes & Licencias</h2>
+    </div>
+    
+    <div class="plans-grid">
+      <!-- Plan Base -->
+      <div class="plan-card" data-plan="base">
+        <div class="plan-header">
+          <span class="plan-name">Base</span>
+          <span class="plan-price">$1,499/mes</span>
+        </div>
+        <ul class="plan-features">
+          <li>✅ Puesta a tierra (250-122)</li>
+          <li>✅ Calibre por amperaje (310-16)</li>
+          <li>✅ IA conceptual básica</li>
+          <li>❌ Motores, HVAC, soldadoras</li>
+        </ul>
+        <button class="btn-plan" onclick="selectPlan('base')">Seleccionar</button>
+      </div>
+
+      <!-- Plan Prime (destacado) -->
+      <div class="plan-card featured" data-plan="prime">
+        <div class="plan-badge">⭐ Recomendado</div>
+        <div class="plan-header">
+          <span class="plan-name">Prime</span>
+          <span class="plan-price">$2,499/mes</span>
+        </div>
+        <ul class="plan-features">
+          <li>✅ Todo lo de Base</li>
+          <li>✅ Motores (430-22, 430-52)</li>
+          <li>✅ HVAC & Soldadoras</li>
+          <li>✅ IA con grounding avanzado</li>
+        </ul>
+        <button class="btn-plan btn-primary" onclick="selectPlan('prime')">Seleccionar</button>
+      </div>
+
+      <!-- Plan Apex -->
+      <div class="plan-card" data-plan="apex">
+        <div class="plan-header">
+          <span class="plan-name">Apex</span>
+          <span class="plan-price">$3,999/mes</span>
+        </div>
+        <ul class="plan-features">
+          <li>✅ Todo lo de Prime</li>
+          <li>✅ Reportes PDF con logo</li>
+          <li>✅ Trazabilidad con hash</li>
+          <li>✅ Soporte prioritario</li>
+        </ul>
+        <button class="btn-plan" onclick="selectPlan('apex')">Seleccionar</button>
+      </div>
+    </div>
+
+    <!-- Sección de Licencia -->
+    <div class="license-box">
+      <h3>🎟️ Canjear Licencia</h3>
+      <p>Ingresa tu código de 30 días para activar tu plan inmediatamente.</p>
+      <input id="licenseCode" type="text" placeholder="IEV-PRIME-30D-XXXX" class="license-input">
+      <button class="btn-license-activate" onclick="redeemLicense()">Activar Plan</button>
+      
+      <div id="userInfo" class="user-info hidden">
+        <p><strong>Usuario:</strong> <span id="userEmail"></span></p>
+        <p><strong>Plan activo:</strong> <span id="userPlan"></span></p>
+        <p><strong>Vence:</strong> <span id="userExpiry"></span></p>
+      </div>
+    </div>
+  </section>
 
   <!-- Auth Modal (usando dialog nativo para mejor accesibilidad) -->
   <dialog id="authModal" class="modal">
@@ -167,10 +181,10 @@
         <button class="btn-license-activate" onclick="redeemLicense()">🎟️ Activar Licencia</button>
       </div>
       
-      <div id="userInfo" class="user-info" style="display: none;">
-        <strong>👤 Usuario:</strong> <span id="userEmail"></span><br>
-        <strong>📋 Plan:</strong> <span id="userPlan"></span><br>
-        <strong>📅 Vence:</strong> <span id="userExpiry"></span>
+      <div id="userInfoModal" class="user-info" style="display: none;">
+        <strong>👤 Usuario:</strong> <span id="userEmailModal"></span><br>
+        <strong>📋 Plan:</strong> <span id="userPlanModal"></span><br>
+        <strong>📅 Vence:</strong> <span id="userExpiryModal"></span>
       </div>
     </div>
   </dialog>
@@ -202,7 +216,7 @@
       }
     };
     
-    // Funciones para modal
+    // Funciones para modal de auth
     window.openAuthModal = function() {
       const modal = document.getElementById('authModal');
       if (modal) modal.showModal();
@@ -219,6 +233,90 @@
         const modal = document.getElementById('authModal');
         if (modal && modal.open) modal.close();
       }
+    });
+  </script>
+  
+  <!-- Router de Vistas + Tema + Sync UI -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // ========== TEMA JEDI/SITH ==========
+      const savedTheme = localStorage.getItem('theme') || 'jedi';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+      
+      const themeToggle = document.getElementById('themeToggle');
+      if (themeToggle) {
+        themeToggle.textContent = savedTheme === 'sith' ? '🌑' : '☀️';
+        themeToggle.onclick = () => {
+          const current = document.documentElement.getAttribute('data-theme');
+          const next = current === 'sith' ? 'jedi' : 'sith';
+          document.documentElement.setAttribute('data-theme', next);
+          localStorage.setItem('theme', next);
+          themeToggle.textContent = next === 'sith' ? '🌑' : '☀️';
+        };
+      }
+      
+      // ========== ROUTER DE VISTAS ==========
+      const plansBtn = document.getElementById('plansBtn');
+      const closePlans = document.getElementById('closePlans');
+      const plansView = document.getElementById('plansView');
+      const chatArea = document.querySelector('.chat-area');
+      
+      if (plansBtn && closePlans && plansView && chatArea) {
+        plansBtn.onclick = () => {
+          plansView.classList.remove('hidden');
+          chatArea.style.display = 'none';
+          document.body.style.overflow = 'hidden'; // Evitar scroll de fondo
+        };
+        
+        closePlans.onclick = () => {
+          plansView.classList.add('hidden');
+          chatArea.style.display = 'flex';
+          document.body.style.overflow = '';
+          if (document.getElementById('userInput')) {
+            document.getElementById('userInput').focus();
+          }
+        };
+      }
+      
+      // ========== SYNC UI: Planes + Auth Modal ==========
+      // Esta función se llama desde app.js después de loadProfile()
+      window.syncPlanUI = function(session) {
+        // Actualizar badge en header
+        const badge = document.getElementById('planBadge');
+        if (badge && session?.plan) {
+          badge.textContent = session.plan;
+        }
+        
+        // Actualizar info en vista de planes
+        const userEmail = document.getElementById('userEmail');
+        const userPlan = document.getElementById('userPlan');
+        const userExpiry = document.getElementById('userExpiry');
+        const userInfo = document.getElementById('userInfo');
+        
+        if (session?.user && userEmail && userPlan && userExpiry && userInfo) {
+          userEmail.textContent = session.user.email || 'N/A';
+          userPlan.textContent = session.plan;
+          userExpiry.textContent = session.expiresAt 
+            ? new Date(session.expiresAt).toLocaleDateString('es-MX') 
+            : 'N/A';
+          userInfo.classList.remove('hidden');
+        }
+        
+        // Actualizar info en modal de auth
+        const userEmailM = document.getElementById('userEmailModal');
+        const userPlanM = document.getElementById('userPlanModal');
+        const userExpiryM = document.getElementById('userExpiryModal');
+        const userInfoM = document.getElementById('userInfoModal');
+        
+        if (session?.user && userEmailM && userPlanM && userExpiryM && userInfoM) {
+          userEmailM.textContent = session.user.email || 'N/A';
+          userPlanM.textContent = session.plan;
+          userExpiryM.textContent = session.expiresAt 
+            ? new Date(session.expiresAt).toLocaleDateString('es-MX') 
+            : 'N/A';
+          userInfoM.style.display = 'block';
+        }
+      };
     });
   </script>
 </body>
