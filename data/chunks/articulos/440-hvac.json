@@ -1,0 +1,255 @@
+{
+  "meta": {
+    "version": "1.0.0",
+    "ultima_actualizacion": "2025-06-02T00:00:00.000Z",
+    "norma": "NOM-001-SEDE-2012"
+  },
+  "id": "nom-001-440",
+  "tipo": "articulo",
+  "numero": "440",
+  "titulo": "Equipos de aire acondicionado y refrigeración",
+  "texto": "Las disposiciones de este Artículo se aplican a los equipos de aire acondicionado y de refrigeración accionados por motor y a los circuitos derivados y controladores de dichos equipos. Se establecen las consideraciones especiales necesarias para los circuitos de alimentación de motocompresores herméticos de refrigeración.",
+  
+  "definiciones": [
+    {
+      "termino": "Corriente de carga nominal (RLA)",
+      "definicion": "Corriente resultante cuando el motocompresor hermético de refrigeración es operado a la carga, tensión y frecuencia nominales del equipo que acciona."
+    },
+    {
+      "termino": "Corriente para selección del circuito derivado (MCA)",
+      "definicion": "Valor en amperes que se utiliza para calcular los valores nominales de los conductores del circuito derivado, medios de desconexión, controladores y dispositivos de protección. Es siempre igual o mayor que la corriente de carga nominal marcada."
+    },
+    {
+      "termino": "Motocompresor hermético de refrigeración",
+      "definicion": "Combinación que consta de un motor y un compresor, ambos encerrados en la misma envolvente, sin ejes o sellos de ejes al exterior y el motor opera dentro del medio refrigerante."
+    },
+    {
+      "termino": "Interruptor/detector de corriente de fuga",
+      "definicion": "Dispositivo en un cordón de alimentación de fuerza que detecta la corriente de fuga e interrumpe el circuito en un nivel predeterminado."
+    }
+  ],
+  
+  "secciones": [
+    {
+      "subseccion": "A",
+      "titulo": "Generalidades",
+      "contenido": "Aplicable a equipos de aire acondicionado y refrigeración con motocompresores herméticos.",
+      "subsecciones": [
+        {
+          "subseccion": "440-1",
+          "titulo": "Alcance",
+          "contenido": "Se aplica a equipos de aire acondicionado y refrigeración accionados por motor y a los circuitos derivados y controladores de dichos equipos."
+        },
+        {
+          "subseccion": "440-2",
+          "titulo": "Definiciones",
+          "contenido": "Define: Corriente de carga nominal (RLA), Corriente para selección del circuito derivado (MCA), Motocompresor hermético de refrigeración, Interruptor/detector de corriente de fuga."
+        },
+        {
+          "subseccion": "440-3",
+          "titulo": "Otros Artículos",
+          "contenido": "Se aplican también los Artículos 430, 422, 424 según corresponda. Los equipos con motocompresores herméticos deben cumplir Tabla 440-3(d)."
+        },
+        {
+          "subseccion": "440-4",
+          "titulo": "Placa de datos",
+          "contenido": "Debe indicar: nombre del fabricante, tensión, fases, frecuencia, corriente de carga nominal (RLA), corriente con rotor bloqueado (LRA) para equipos >9A a 115V o >4.5A a 230V."
+        },
+        {
+          "subseccion": "440-5",
+          "titulo": "Marcado en los controladores",
+          "contenido": "Debe incluir: nombre del fabricante, tensión, número de fases, corriente nominal de plena carga y con rotor bloqueado."
+        },
+        {
+          "subseccion": "440-6",
+          "titulo": "Ampacidad y valor nominal",
+          "contenido": "Para motocompresor hermético, usar corriente de carga nominal (RLA) o corriente de selección del circuito derivado (MCA) para determinar conductores y protecciones."
+        }
+      ]
+    },
+    {
+      "subseccion": "B",
+      "titulo": "Medios de desconexión",
+      "subsecciones": [
+        {
+          "subseccion": "440-11",
+          "titulo": "Generalidades",
+          "contenido": "Se deben proporcionar medios de desconexión para equipos de aire acondicionado y refrigeración."
+        },
+        {
+          "subseccion": "440-12",
+          "titulo": "Capacidad nominal",
+          "contenido": "El valor nominal en amperes debe ser como mínimo el 115% de la corriente de carga nominal o de selección del circuito derivado.",
+          "formula": "I_desconexion ≥ I_RLA × 1.15"
+        },
+        {
+          "subseccion": "440-13",
+          "titulo": "Equipos conectados con cordón",
+          "contenido": "Para acondicionadores de aire de habitación, refrigeradores y congeladores, se permite usar clavija de conexión y contacto como medio de desconexión."
+        },
+        {
+          "subseccion": "440-14",
+          "titulo": "Ubicación",
+          "contenido": "El medio de desconexión debe estar a la vista desde el equipo y ser fácilmente accesible."
+        }
+      ]
+    },
+    {
+      "subseccion": "C",
+      "titulo": "Protección contra cortocircuito y fallas a tierra",
+      "subsecciones": [
+        {
+          "subseccion": "440-21",
+          "titulo": "Generalidades",
+          "contenido": "Dispositivos para proteger conductores, aparatos de control y motores contra sobrecorriente por cortocircuito y fallas a tierra."
+        },
+        {
+          "subseccion": "440-22",
+          "titulo": "Aplicación y selección",
+          "contenido": "El dispositivo de protección debe ser capaz de conducir la corriente de arranque. Valor nominal máximo: 175% de RLA (hasta 225% excepcionalmente).",
+          "formula_maxima": "I_proteccion ≤ I_RLA × 1.75 (hasta 2.25 excepcionalmente)",
+          "valores": [
+            "Protección normal: 175% de RLA",
+            "Excepción (si no arranca): hasta 225% de RLA",
+            "Mínimo: 15 amperes"
+          ]
+        }
+      ]
+    },
+    {
+      "subseccion": "D",
+      "titulo": "Conductores del circuito derivado",
+      "subsecciones": [
+        {
+          "subseccion": "440-31",
+          "titulo": "Generalidades",
+          "contenido": "La ampacidad de los conductores se determina según Artículo 310, excepto lo modificado."
+        },
+        {
+          "subseccion": "440-32",
+          "titulo": "Un solo motocompresor",
+          "contenido": "Los conductores deben tener ampacidad no menor al 125% de la corriente de carga nominal (RLA) o de selección del circuito derivado (MCA).",
+          "formula": "I_conductor ≥ I_RLA × 1.25",
+          "ejemplo": "Condensadora RLA=30A → Conductor: 30×1.25=37.5A → Calibre 8 AWG (50A)"
+        },
+        {
+          "subseccion": "440-33",
+          "titulo": "Motocompresor con o sin cargas adicionales",
+          "contenido": "I_conductor = (I_mayor × 1.25) + Σ(I_otros)",
+          "formula": "I_total = (I_mayor_RLA × 1.25) + suma de corrientes de otros motores"
+        },
+        {
+          "subseccion": "440-34",
+          "titulo": "Cargas combinadas",
+          "contenido": "Los conductores deben tener ampacidad suficiente para la carga de alumbrado o aparatos más la carga del motocompresor."
+        }
+      ]
+    },
+    {
+      "subseccion": "E",
+      "titulo": "Controladores para motocompresores",
+      "subsecciones": [
+        {
+          "subseccion": "440-41",
+          "titulo": "Capacidad nominal",
+          "contenido": "El controlador debe tener valor nominal de corriente de plena carga y corriente con rotor bloqueado no menor a las del motocompresor."
+        }
+      ]
+    },
+    {
+      "subseccion": "F",
+      "titulo": "Protección contra sobrecarga",
+      "subsecciones": [
+        {
+          "subseccion": "440-51",
+          "titulo": "Generalidades",
+          "contenido": "Dispositivos para proteger motocompresor, aparatos de control y conductores contra calentamiento excesivo por sobrecargas."
+        },
+        {
+          "subseccion": "440-52",
+          "titulo": "Aplicación y selección",
+          "contenido": "Protección del motocompresor: Relevador de sobrecarga separado (max 140% de RLA), protector térmico integrado, fusible/interruptor automático (max 125% de RLA).",
+          "valores": [
+            "Relevador de sobrecarga separado: máximo 140% de RLA",
+            "Fusible o interruptor automático: máximo 125% de RLA",
+            "Protector térmico integrado: no debe permitir corriente permanente >156% de RLA"
+          ]
+        },
+        {
+          "subseccion": "440-54",
+          "titulo": "Circuitos derivados de 15 o 20 amperes no conectados con cordón",
+          "contenido": "Se permite protección contra sobrecarga para equipos conectados a circuitos monofásicos de 15-20A, 120V o 15A, 208-240V."
+        },
+        {
+          "subseccion": "440-55",
+          "titulo": "Circuitos derivados de 15 o 20 amperes conectados con cordón y clavija",
+          "contenido": "Aplicable a acondicionadores de aire, refrigeradores, congeladores, enfriadores de agua. La clavija no debe ser mayor a 20A para 120V o 15A para 250V."
+        }
+      ]
+    },
+    {
+      "subseccion": "G",
+      "titulo": "Acondicionadores de aire para habitación",
+      "subsecciones": [
+        {
+          "subseccion": "440-60",
+          "titulo": "Generalidades",
+          "contenido": "Aplica a acondicionadores de aire de ventana, consola o pared, monofásicos hasta 250V."
+        },
+        {
+          "subseccion": "440-62",
+          "titulo": "Requisitos de circuitos derivados",
+          "contenido": "La corriente total marcada no debe exceder el 80% del valor nominal del circuito derivado cuando no se alimentan otras cargas."
+        },
+        {
+          "subseccion": "440-63",
+          "titulo": "Medios de desconexión",
+          "contenido": "Se permite que la clavija de conexión y el contacto sirvan como medio de desconexión si los controles manuales son fácilmente accesibles."
+        },
+        {
+          "subseccion": "440-64",
+          "titulo": "Cordones de alimentación",
+          "contenido": "Longitud máxima: 3.00 m para 120V, 1.80 m para 208/240V."
+        }
+      ]
+    }
+  ],
+  
+  "formulas_clave": [
+    "I_conductor = I_RLA × 1.25 (440-32)",
+    "I_proteccion ≤ I_RLA × 1.75 (hasta 2.25 excepcionalmente) (440-22)",
+    "I_total = (I_mayor_RLA × 1.25) + Σ(I_otros) (440-33)",
+    "I_desconexion ≥ I_RLA × 1.15 (440-12)"
+  ],
+  
+  "valores_tipicos": {
+    "proteccion": "175% de RLA (hasta 225% si no arranca)",
+    "conductor": "125% de RLA (MCA)",
+    "desconexion": "115% de RLA"
+  },
+  
+  "ejemplo": "Condensadora RLA=25A, ventilador=2A. Conductor: (25×1.25)+2=33.25A → calibre 10 AWG. Protección: 25×1.75=43.75A → interruptor 45A o 50A.",
+  
+  "tags": [
+    "HVAC", "aire acondicionado", "refrigeracion", "440", "RLA", "LRA", "MCA",
+    "compresor", "condensadora", "motocompresor", "hermetico",
+    "manejadora de aire", "fan coil", "minisplit", "central"
+  ],
+  
+  "nivel_prioridad": "CRITICA",
+  
+  "casos_uso": [
+    "dimensionamiento de conductores para HVAC",
+    "seleccion de protecciones para condensadora",
+    "calculo de MCA (Minimum Circuit Ampacity)",
+    "seleccion de interruptor termomagnetico para HVAC",
+    "instalacion de minisplit",
+    "diseno de cuarto de maquinas con HVAC"
+  ],
+  
+  "warning": "⚠️ Usar siempre la corriente de placa del equipo (RLA), NO las tablas de motores genéricas. La corriente MCA es la base para dimensionar conductores.",
+  
+  "version": "2012",
+  "extracted_at": "2025-06-02T00:00:00.000Z",
+  "tokens_estimados": 4500
+}
