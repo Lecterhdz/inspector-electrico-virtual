@@ -1,0 +1,192 @@
+{
+  "meta": {
+    "version": "1.0.0",
+    "ultima_actualizacion": "2025-06-02T00:00:00.000Z",
+    "norma": "NOM-001-SEDE-2012"
+  },
+  "id": "nom-001-630",
+  "tipo": "articulo",
+  "numero": "630",
+  "titulo": "Máquinas de soldar eléctricas",
+  "texto": "Este Artículo cubre las máquinas de soldar de arco eléctrico, aparatos de soldar por resistencia, corte por plasma y otros equipos similares de soldadura y corte que se conectan a una fuente de energía eléctrica.",
+  
+  "definiciones": [
+    {
+      "termino": "I1max",
+      "definicion": "Valor máximo de la corriente nominal de alimentación a la capacidad nominal máxima de la soldadora."
+    },
+    {
+      "termino": "I1eff",
+      "definicion": "Valor máximo de la corriente eficaz de alimentación, calculado a partir de I1, el régimen de trabajo (X) y la corriente de alimentación sin carga (I0)."
+    },
+    {
+      "termino": "Ciclo de trabajo (Duty Cycle)",
+      "definicion": "Porcentaje de tiempo durante el cual la soldadora está bajo carga durante un período de 10 minutos (para soldadura de arco) o por hora (para soldadura por resistencia)."
+    }
+  ],
+  
+  "secciones": [
+    {
+      "subseccion": "A",
+      "titulo": "Disposiciones generales",
+      "subsecciones": [
+        {
+          "subseccion": "630-1",
+          "titulo": "Alcance",
+          "contenido": "Cubre máquinas de soldar de arco eléctrico, aparatos de soldar por resistencia, corte por plasma y equipos similares de soldadura y corte."
+        }
+      ]
+    },
+    {
+      "subseccion": "B",
+      "titulo": "Máquinas de soldar de arco",
+      "subsecciones": [
+        {
+          "subseccion": "630-11",
+          "titulo": "Ampacidad de los conductores de alimentación",
+          "contenido": "La ampacidad no debe ser menor al valor I1eff de la placa de características. Alternativamente, usar corriente nominal del primario × factor de la Tabla 630-11(a) según régimen de trabajo.",
+          "tabla": {
+            "nombre": "Tabla 630-11(a) - Factores de multiplicación para el régimen de trabajo",
+            "encabezados": ["Régimen de trabajo (%)", "Multiplicador (sin motor-generador)", "Multiplicador (con motor-generador)"],
+            "filas": [
+              ["100", "1.00", "1.00"],
+              ["90", "0.95", "0.96"],
+              ["80", "0.89", "0.91"],
+              ["70", "0.84", "0.86"],
+              ["60", "0.78", "0.81"],
+              ["50", "0.71", "0.75"],
+              ["40", "0.63", "0.69"],
+              ["30", "0.55", "0.62"],
+              ["20 o menos", "0.45", "0.55"]
+            ]
+          },
+          "formula_grupo": "I_total = 100% × (2 más grandes) + 85% × (3ra) + 70% × (4ta) + 60% × (restantes)"
+        },
+        {
+          "subseccion": "630-12",
+          "titulo": "Protección contra sobrecorriente",
+          "contenido": "La protección no debe ser mayor que 200% de I1max o 200% de la corriente nominal del primario. Se permite el siguiente tamaño estándar superior si es necesario.",
+          "formula": "I_proteccion ≤ I_primaria × 2.0 (máximo 200%)",
+          "ejemplo": "Soldadora de arco 50A primaria → protección máxima 100A → interruptor 100A"
+        },
+        {
+          "subseccion": "630-13",
+          "titulo": "Medios de desconexión",
+          "contenido": "Debe suministrarse un medio de desconexión en el circuito de alimentación si la soldadora no tiene desconectador integrado."
+        },
+        {
+          "subseccion": "630-14",
+          "titulo": "Marcado",
+          "contenido": "La placa de datos debe incluir: fabricante, frecuencia, fases, tensión primaria, I1max, I1eff, tensión máxima en circuito abierto, corriente secundaria, régimen de trabajo."
+        },
+        {
+          "subseccion": "630-15",
+          "titulo": "Puesta a tierra del circuito secundario",
+          "contenido": "Los conductores del secundario (electrodo y trabajo) no se consideran como alambrado del inmueble para efectos del Artículo 250."
+        }
+      ]
+    },
+    {
+      "subseccion": "C",
+      "titulo": "Soldadoras por resistencia",
+      "subsecciones": [
+        {
+          "subseccion": "630-31",
+          "titulo": "Ampacidad de los conductores de alimentación",
+          "contenido": "Para soldadoras de costura y alimentación automática: 70% de corriente nominal. Para soldadoras de operación manual: 50% de corriente nominal.",
+          "tabla": {
+            "nombre": "Tabla 630-31(a)(2) - Factores de multiplicación por ciclo de trabajo",
+            "encabezados": ["Ciclo de trabajo (%)", "Factor"],
+            "filas": [
+              ["50", "0.71"],
+              ["40", "0.63"],
+              ["30", "0.55"],
+              ["25", "0.50"],
+              ["20", "0.45"],
+              ["15", "0.39"],
+              ["10", "0.32"],
+              ["7.5", "0.27"],
+              ["5 o menos", "0.22"]
+            ]
+          },
+          "formula": "I_conductor = I_primaria × factor (según ciclo de trabajo)",
+          "ejemplo": "Soldadora resistencia 100A, ciclo 40% → I = 100 × 0.63 = 63A → calibre 6 AWG (65A)"
+        },
+        {
+          "subseccion": "630-32",
+          "titulo": "Protección contra sobrecorriente",
+          "contenido": "La protección no debe ser mayor que 300% de la corriente primaria nominal.",
+          "formula": "I_proteccion ≤ I_primaria × 3.0 (máximo 300%)",
+          "ejemplo": "Soldadora resistencia 100A → protección máxima 300A → interruptor 300A"
+        },
+        {
+          "subseccion": "630-33",
+          "titulo": "Medios de desconexión",
+          "contenido": "Debe proveerse un desconectador o interruptor automático para cada soldadora por resistencia y su equipo de control."
+        },
+        {
+          "subseccion": "630-34",
+          "titulo": "Marcado",
+          "contenido": "La placa de datos debe incluir: fabricante, frecuencia, tensión primaria, kVA nominales (50% ciclo), tensión secundaria, corriente de cortocircuito secundaria."
+        }
+      ]
+    },
+    {
+      "subseccion": "D",
+      "titulo": "Cable para soldadoras",
+      "subsecciones": [
+        {
+          "subseccion": "630-41",
+          "titulo": "Conductores",
+          "contenido": "El aislamiento de los conductores en el circuito secundario debe ser retardante a la flama."
+        },
+        {
+          "subseccion": "630-42",
+          "titulo": "Instalación",
+          "contenido": "Se permite instalar los cables en una charola portacables dedicada, con soportes cada 15 cm y anuncios cada 6 m: 'Charola portacables para máquinas soldadoras solamente'."
+        }
+      ]
+    }
+  ],
+  
+  "formulas_clave": [
+    "Soldadora arco: I_conductor = I_primaria × factor_tabla (según régimen de trabajo)",
+    "Soldadora arco: I_proteccion = I_primaria × 2.0 (200%)",
+    "Soldadora resistencia: I_conductor = I_primaria × factor_tabla (según ciclo de trabajo)",
+    "Soldadora resistencia: I_proteccion = I_primaria × 3.0 (300%)"
+  ],
+  
+  "valores_tipicos": {
+    "arco_conductor": "100% de I_primaria (ajustado por régimen de trabajo)",
+    "arco_proteccion": "200% de I_primaria",
+    "resistencia_conductor": "50-70% de I_primaria (según tipo)",
+    "resistencia_proteccion": "300% de I_primaria"
+  },
+  
+  "ejemplos": [
+    "Soldadora arco 50A, régimen 60% → I_conductor = 50 × 0.78 = 39A → calibre 8 AWG (50A), I_proteccion = 50 × 2 = 100A",
+    "Soldadora resistencia 100A, ciclo 40% → I_conductor = 100 × 0.63 = 63A → calibre 6 AWG (65A), I_proteccion = 100 × 3 = 300A"
+  ],
+  
+  "tags": [
+    "soldadora", "soldar", "welder", "630", "arco", "resistencia",
+    "punto", "costura", "proyeccion", "tipo", "ciclo de trabajo",
+    "régimen de trabajo", "I1eff", "I1max", "electrodo"
+  ],
+  
+  "nivel_prioridad": "CRITICA",
+  
+  "casos_uso": [
+    "dimensionamiento de conductores para soldadoras",
+    "selección de protecciones para equipos de soldadura",
+    "cálculo de corriente para soldadoras de arco",
+    "cálculo de corriente para soldadoras de resistencia",
+    "instalación de charolas para cables de soldadura"
+  ],
+  
+  "warning": "⚠️ Para soldadoras de arco, usar I1eff o corriente nominal × factor de régimen. Para soldadoras de resistencia, usar 50-70% según tipo. La protección es 200% para arco y 300% para resistencia.",
+  
+  "version": "2012",
+  "extracted_at": "2025-06-02T00:00:00.000Z",
+  "tokens_estimados": 3800
+}
