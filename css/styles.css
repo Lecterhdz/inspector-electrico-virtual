@@ -92,6 +92,7 @@ body {
 /* ========== MAIN CONTAINER ========== */
 .main-container {
   flex: 1;
+  min-height: 0;
   max-width: 1400px;
   width: 100%;
   margin: 0 auto;
@@ -99,8 +100,6 @@ body {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  min-height: calc(100vh - 72px);
-  min-height: calc(100dvh - 72px);
 }
 
 /* ========== CHAT AREA ========== */
@@ -128,6 +127,7 @@ body {
   min-height: 0;
   -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;
+  contain: layout style;  /* ← Mejora rendimiento de scroll */
 }
 
 /* Scrollbar personalizada */
