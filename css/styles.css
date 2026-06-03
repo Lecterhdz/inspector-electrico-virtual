@@ -111,9 +111,11 @@ body {
   border: 1px solid var(--gray-200);
   display: flex;
   flex-direction: column;
+  height: 100%;  /* ← Cambiar de "auto" a "100%" */
   overflow: hidden;
   flex: 1;
-  min-height: 300px;
+  min-height: 300px; 
+  overflow: hidden;  /* ← Asegurar que no se desborde */
 }
 
 .chat-messages {
@@ -215,6 +217,7 @@ body {
 
 /* Chat input - con safe area para iOS */
 .chat-input-area {
+  flex-shrink: 0;  /* ← Evita que el input se encoja */
   padding: 1rem;
   padding-bottom: max(1rem, var(--safe-area-bottom));
   border-top: 1px solid var(--gray-200);
